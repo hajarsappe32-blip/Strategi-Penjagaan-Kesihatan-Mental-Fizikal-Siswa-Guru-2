@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategi Penjagaan Kesihatan Mental & Fizikal Siswa Guru | Karya Interaktif oleh Hajar</title>
+<meta name="description" content="Aplikasi web interaktif berkonsepkan permainan mini tentang strategi kesejahteraan mental dan fizikal siswa guru. Dibangunkan oleh Hajar Sappe binti Mohd Saum.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#A8C3A0; --sage-d:#5F8459; --sage-l:#E4EFDF;
+  --lav:#C9B8E8;  --lav-d:#7D67B8;  --lav-l:#EFE8FB;
+  --cream:#FFF7EC;--cream-d:#F3E3C8;
+  --peach:#FFC9B0;--peach-d:#DD7F5C;--peach-l:#FFEBE1;
+  --sky:#BFE0F0;  --sky-d:#4F97B8;  --sky-l:#E4F3FA;
+  --ink:#38423D;  --ink-2:#67716C;  --ink-3:#98A19C;
+  --glass:rgba(255,255,255,.58); --glass-b:rgba(255,255,255,.85);
+  --shadow:0 18px 50px -20px rgba(92,78,130,.35);
+  --shadow-s:0 8px 24px -12px rgba(92,78,130,.30);
+  --r:26px;
+  --ease:cubic-bezier(.22,.9,.28,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Plus Jakarta Sans','Quicksand',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:var(--ink);min-height:100vh;overflow-x:hidden;line-height:1.55;
+  background:linear-gradient(135deg,#FFF7EC 0%,#F5EFFC 42%,#EAF3E6 100%);
+  -webkit-font-smoothing:antialiased;
+}
+body.no-scroll{overflow:hidden}
+h1,h2,h3,h4{font-family:'Quicksand','Plus Jakarta Sans',sans-serif;line-height:1.2;letter-spacing:-.01em}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ---------- Floating background blobs ---------- */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.65;animation:floatBlob 22s ease-in-out infinite}
+.blob.b1{width:420px;height:420px;background:var(--sage);top:-120px;left:-100px}
+.blob.b2{width:380px;height:380px;background:var(--lav);top:30%;right:-120px;animation-delay:-6s;animation-duration:26s}
+.blob.b3{width:340px;height:340px;background:var(--peach);bottom:-120px;left:20%;animation-delay:-12s;animation-duration:24s}
+.blob.b4{width:260px;height:260px;background:var(--sky);top:12%;left:45%;opacity:.45;animation-delay:-3s;animation-duration:30s}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(125,103,184,.12) 1.2px,transparent 1.2px);background-size:26px 26px;mask-image:linear-gradient(180deg,#000,transparent 75%)}
+@keyframes floatBlob{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(60px,-40px) scale(1.08)}
+  66%{transform:translate(-40px,50px) scale(.94)}
+}
+
+/* ---------- Glass & primitives ---------- */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--shadow);
+}
+.app{position:relative;z-index:1}
+.container{width:min(1140px,100% - 32px);margin-inline:auto}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55em;
+  padding:.85em 1.5em;border-radius:999px;font-weight:700;font-size:1rem;
+  transition:transform .35s var(--spring),box-shadow .35s var(--ease),filter .3s,background .3s;
+  position:relative;overflow:hidden;white-space:nowrap;
+}
+.btn svg{width:1.15em;height:1.15em;transition:transform .35s var(--spring)}
+.btn:hover:not(:disabled){transform:translateY(-3px) scale(1.03)}
+.btn:hover:not(:disabled) svg{transform:translateX(3px)}
+.btn:active:not(:disabled){transform:translateY(0) scale(.96)}
+.btn:focus-visible,.station-card:focus-visible,.opt:focus-visible{outline:3px solid var(--lav-d);outline-offset:3px}
+.btn-primary{color:#fff;background:linear-gradient(135deg,#7FA978 0%,#9A86CF 100%);box-shadow:0 12px 26px -10px rgba(110,90,170,.6)}
+.btn-primary:hover:not(:disabled){box-shadow:0 18px 34px -12px rgba(110,90,170,.75)}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s var(--ease)}
+.btn-primary:hover:not(:disabled)::after{transform:translateX(120%)}
+.btn-soft{background:rgba(255,255,255,.75);color:var(--ink);border:1px solid rgba(125,103,184,.18);box-shadow:var(--shadow-s)}
+.btn-soft:hover:not(:disabled){background:#fff}
+.btn-peach{color:#fff;background:linear-gradient(135deg,#F0A283,#DD7F5C);box-shadow:0 12px 26px -10px rgba(221,127,92,.6)}
+.btn-lg{padding:1.05em 2em;font-size:1.08rem}
+.btn:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.5)}
+.btn.pulse{animation:pulseBtn 1.8s ease-in-out infinite}
+@keyframes pulseBtn{0%,100%{box-shadow:0 0 0 0 rgba(154,134,207,.55)}50%{box-shadow:0 0 0 14px rgba(154,134,207,0)}}
+
+.badge{
+  display:inline-flex;align-items:center;gap:.35em;padding:.32em .8em;border-radius:999px;
+  font-size:.74rem;font-weight:700;letter-spacing:.01em;background:rgba(255,255,255,.8);
+  border:1px solid rgba(0,0,0,.05);color:var(--ink-2);white-space:nowrap
+}
+.badge.sage{background:var(--sage-l);color:var(--sage-d)}
+.badge.lav{background:var(--lav-l);color:var(--lav-d)}
+.badge.peach{background:var(--peach-l);color:var(--peach-d)}
+.badge.sky{background:var(--sky-l);color:var(--sky-d)}
+
+/* ---------- Screens & transitions ---------- */
+.screen{display:none;min-height:100vh;padding:28px 0 60px}
+.screen.active{display:block;animation:screenIn .75s var(--ease) both}
+.screen.leaving{animation:screenOut .38s var(--ease) forwards}
+@keyframes screenIn{from{opacity:0;transform:translateY(34px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes screenOut{to{opacity:0;transform:translateY(-24px) scale(.98);filter:blur(6px)}}
+.screen.active .reveal{animation:slideUp .8s var(--ease) both;animation-delay:calc(var(--i,0) * 90ms + 120ms)}
+@keyframes slideUp{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes popIn{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ---------- Sound toggle ---------- */
+.sound-toggle{
+  position:fixed;top:16px;right:16px;z-index:60;width:48px;height:48px;border-radius:50%;
+  display:grid;place-items:center;transition:transform .35s var(--spring)
+}
+.sound-toggle:hover{transform:scale(1.1) rotate(-6deg)}
+.sound-toggle svg{width:22px;height:22px;color:var(--lav-d)}
+.sound-toggle .off{display:none}
+.sound-toggle.muted .on{display:none}
+.sound-toggle.muted .off{display:block}
+
+/* ---------- START SCREEN ---------- */
+.start-wrap{min-height:calc(100vh - 88px);display:flex;flex-direction:column;justify-content:center;gap:22px}
+.hero{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:clamp(24px,4vw,56px);padding:clamp(22px,4vw,48px);align-items:center}
+.profile{display:flex;flex-direction:column;align-items:center;gap:18px}
+.photo-frame{position:relative;width:min(230px,62vw);aspect-ratio:4/5;animation:floatY 6s ease-in-out infinite}
+.photo-frame::before{
+  content:"";position:absolute;inset:-9px;border-radius:34px;
+  background:conic-gradient(from 0deg,var(--sage),var(--lav),var(--peach),var(--sky),var(--sage));
+  animation:spin 8s linear infinite;filter:blur(.5px)
+}
+.photo-frame::after{content:"";position:absolute;inset:-4px;border-radius:30px;background:var(--cream)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.photo-frame .photo,.photo-fallback{position:relative;z-index:2;width:100%;height:100%;object-fit:cover;object-position:center 22%;border-radius:26px;box-shadow:0 20px 40px -18px rgba(60,50,100,.5)}
+.photo-fallback{display:none;place-items:center;background:linear-gradient(135deg,var(--sage-l),var(--lav-l));font:700 3rem 'Quicksand';color:var(--lav-d)}
+.photo-frame.no-img .photo{display:none}
+.photo-frame.no-img .photo-fallback{display:grid}
+.photo-badge{position:absolute;z-index:3;bottom:-14px;left:50%;transform:translateX(-50%);background:#fff;padding:.45em 1em;border-radius:999px;font-weight:700;font-size:.8rem;box-shadow:var(--shadow-s);white-space:nowrap;color:var(--sage-d)}
+.float-emo{position:absolute;z-index:3;font-size:1.6rem;width:46px;height:46px;display:grid;place-items:center;background:rgba(255,255,255,.9);border-radius:50%;box-shadow:var(--shadow-s);animation:floatY 4s ease-in-out infinite}
+.float-emo.e1{top:6%;left:-24px}
+.float-emo.e2{top:30%;right:-26px;animation-delay:-1s}
+.float-emo.e3{bottom:22%;left:-26px;animation-delay:-2s}
+.float-emo.e4{top:-18px;right:16%;animation-delay:-3s}
+.dev-badge{
+  margin-top:8px;display:inline-flex;align-items:center;gap:.5em;padding:.6em 1.2em;border-radius:999px;
+  background:linear-gradient(135deg,#fff,var(--lav-l));border:1px solid rgba(125,103,184,.25);
+  font-weight:600;color:var(--lav-d);box-shadow:var(--shadow-s);font-size:.95rem
+}
+.dev-badge b{font-family:'Quicksand';font-size:1.15rem;background:linear-gradient(135deg,var(--sage-d),var(--lav-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.dev-badge .sparkle{animation:twinkle 1.8s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.3) rotate(20deg)}}
+.id-card{width:100%;background:rgba(255,255,255,.72);border-radius:20px;padding:14px 16px;border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow-s)}
+.id-card-title{display:flex;align-items:center;gap:.4em;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--sage-d);margin-bottom:8px}
+.id-row{display:flex;flex-direction:column;padding:7px 0;border-top:1px dashed rgba(0,0,0,.08)}
+.id-row:first-of-type{border-top:none}
+.id-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.id-val{font-weight:700;font-size:.95rem;color:var(--ink);word-break:break-word}
+.id-val.name{font-family:'Quicksand';font-size:1.02rem;color:var(--lav-d)}
+.eyebrow{display:inline-flex;align-items:center;gap:.5em;font-weight:700;font-size:.82rem;color:var(--sage-d);background:var(--sage-l);padding:.45em 1em;border-radius:999px}
+.hero h1{font-size:clamp(1.9rem,4.2vw,3.15rem);margin:16px 0 14px;font-weight:700}
+.grad{background:linear-gradient(120deg,var(--sage-d),var(--lav-d) 55%,var(--peach-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink-2);font-size:clamp(.98rem,1.4vw,1.08rem);max-width:60ch}
+.feature-chips{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 26px}
+.chip{display:flex;align-items:center;gap:.5em;background:rgba(255,255,255,.75);padding:.6em 1em;border-radius:16px;font-weight:600;font-size:.88rem;box-shadow:var(--shadow-s);transition:transform .35s var(--spring)}
+.chip:hover{transform:translateY(-3px) rotate(-1deg)}
+.chip .ce{font-size:1.2rem}
+.hint{margin-top:14px;font-size:.82rem;color:var(--ink-3)}
+.foot-note{text-align:center;font-size:.85rem;color:var(--ink-2)}
+.foot-note b{color:var(--lav-d)}
+
+/* ---------- Screen head ---------- */
+.screen-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;margin-bottom:20px;padding-right:72px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img,.brand .mini-fb{width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid #fff;box-shadow:var(--shadow-s)}
+.brand .mini-fb{display:grid;place-items:center;background:var(--lav-l);font-weight:800;color:var(--lav-d)}
+.brand small{display:block;font-size:.7rem;color:var(--ink-3);font-weight:600}
+.brand strong{font-family:'Quicksand';font-size:.98rem}
+.step-pill{font-weight:700;font-size:.8rem;color:var(--lav-d);background:var(--lav-l);padding:.45em 1em;border-radius:999px}
+
+.section-title{text-align:center;margin-bottom:22px}
+.section-title h2{font-size:clamp(1.5rem,3vw,2.2rem);margin:10px 0 6px}
+.section-title p{color:var(--ink-2);max-width:62ch;margin-inline:auto}
+
+/* ---------- Progress ---------- */
+.progress-card{padding:18px 22px;margin-bottom:24px}
+.progress-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.progress-top strong{font-family:'Quicksand';font-size:1.05rem}
+.progress-top span{font-weight:700;color:var(--sage-d);font-size:.9rem}
+.progress-track{position:relative;height:16px;border-radius:999px;background:rgba(125,103,184,.12);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--sage),#9DBF93,var(--lav),var(--peach));background-size:200% 100%;transition:width 1s var(--spring);animation:shimmer 3s linear infinite;position:relative}
+.progress-fill::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.25) 0 10px,transparent 10px 20px);animation:stripes 1s linear infinite}
+@keyframes shimmer{to{background-position:200% 0}}
+@keyframes stripes{to{background-position:28px 0}}
+.progress-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.pstep{text-align:center;font-size:.72rem;font-weight:700;color:var(--ink-3);transition:color .4s}
+.pstep i{display:grid;place-items:center;margin:0 auto 4px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.8);font-style:normal;font-size:.95rem;border:2px solid rgba(125,103,184,.15);transition:all .5s var(--spring)}
+.pstep.done{color:var(--sage-d)}
+.pstep.done i{background:var(--sage);color:#fff;border-color:var(--sage);transform:scale(1.12)}
+
+/* ---------- Station cards ---------- */
+.station-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px}
+.station-card{
+  --accent:var(--sage);--accent-l:var(--sage-l);--accent-d:var(--sage-d);
+  position:relative;padding:22px;cursor:pointer;display:flex;flex-direction:column;gap:12px;text-align:left;
+  transition:transform .45s var(--spring),box-shadow .45s var(--ease);overflow:hidden;outline:none
+}
+.station-card::before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--accent);opacity:.25;top:-70px;right:-60px;transition:transform .6s var(--ease)}
+.station-card:hover{transform:translateY(-8px) rotate(-.4deg);box-shadow:0 26px 50px -22px rgba(92,78,130,.5)}
+.station-card:hover::before{transform:scale(1.35)}
+.station-card:hover .st-icon{transform:rotate(-8deg) scale(1.1)}
+.st-top{display:flex;justify-content:space-between;align-items:center;position:relative}
+.st-num{font-weight:800;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-d)}
+.st-status{font-size:.72rem;font-weight:700;padding:.3em .75em;border-radius:999px;background:rgba(255,255,255,.85);color:var(--ink-3)}
+.station-card.done .st-status{background:var(--sage);color:#fff}
+.st-icon{position:relative;width:62px;height:62px;border-radius:20px;display:grid;place-items:center;background:var(--accent-l);color:var(--accent-d);transition:transform .45s var(--spring);box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)}
+.st-icon svg{width:32px;height:32px}
+.st-icon .st-emo{position:absolute;right:-10px;bottom:-8px;font-size:1.35rem;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15))}
+.station-card h3{font-size:1.12rem;position:relative}
+.st-badges{display:flex;flex-wrap:wrap;gap:6px}
+.station-card p{font-size:.88rem;color:var(--ink-2);flex:1}
+.st-cta{font-weight:700;font-size:.9rem;color:var(--accent-d);display:inline-flex;align-items:center;gap:.4em;transition:gap .3s}
+.station-card:hover .st-cta{gap:.8em}
+.station-card.done{border-color:var(--sage)}
+.station-card.done::after{content:"✓";position:absolute;right:18px;bottom:14px;font-size:3.8rem;font-weight:800;color:var(--sage);opacity:.18;line-height:1}
+.map-actions{display:flex;justify-content:center;flex-direction:column;align-items:center;gap:10px;margin-top:28px;text-align:center}
+.map-actions small{color:var(--ink-3);font-weight:600}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;visibility:hidden;pointer-events:none}
+.modal.open{visibility:visible;pointer-events:auto}
+.modal-backdrop{position:absolute;inset:0;background:rgba(60,52,90,.32);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .4s}
+.modal.open .modal-backdrop{opacity:1}
+.modal-card{
+  position:relative;width:min(860px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+  background:rgba(255,252,247,.9);opacity:0;transform:translateY(40px) scale(.94);transition:opacity .45s var(--ease),transform .55s var(--spring)
+}
+.modal.open .modal-card{opacity:1;transform:none}
+.modal-close{position:absolute;top:14px;right:14px;z-index:3;width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:var(--shadow-s);font-size:1rem;font-weight:700;transition:transform .35s var(--spring)}
+.modal-close:hover{transform:rotate(90deg) scale(1.1)}
+.modal-body{overflow-y:auto;padding:26px 26px 10px;overscroll-behavior:contain}
+.modal-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 22px;border-top:1px solid rgba(0,0,0,.06);flex-wrap:wrap}
+.modal-foot span{font-size:.85rem;color:var(--ink-2);font-weight:600;flex:1;min-width:180px}
+.modal-foot span.ok{color:var(--sage-d)}
+
+.st-head{display:flex;gap:14px;align-items:center;margin-bottom:16px;padding-right:44px}
+.st-head .st-icon{flex:none}
+.st-head h2{font-size:clamp(1.2rem,2.6vw,1.55rem);margin-top:6px}
+
+.scene{position:relative;border-radius:22px;padding:46px 16px 18px;margin-bottom:16px;overflow:hidden;background:linear-gradient(160deg,var(--accent-l),#fff 85%)}
+.scene::before{content:"";position:absolute;left:-10%;right:-10%;bottom:-40px;height:90px;border-radius:50%;background:var(--accent);opacity:.25}
+.scene .scene-loc{position:absolute;top:12px;left:12px}
+.scene .scene-theory{position:absolute;top:12px;right:12px}
+.scene-tags{position:relative;display:flex;flex-wrap:wrap;justify-content:space-around;gap:10px}
+.scene-tag{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:76px}
+.scene-emo{font-size:2.3rem;animation:floatY 3.6s ease-in-out infinite;animation-delay:var(--d);filter:drop-shadow(0 6px 6px rgba(0,0,0,.12))}
+.scene-label{font-size:.72rem;font-weight:700;background:#fff;padding:.25em .7em;border-radius:999px;box-shadow:var(--shadow-s);white-space:nowrap}
+
+.info{background:rgba(255,255,255,.8);border-left:4px solid var(--accent-d);border-radius:14px;padding:12px 16px;font-size:.9rem;color:var(--ink-2);margin-bottom:18px}
+.info b{color:var(--ink)}
+.sim{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow-s)}
+.sim-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sim-head h3{font-size:1.05rem;display:flex;align-items:center;gap:.4em}
+.sim-msg{font-size:.88rem;font-weight:600;color:var(--ink-2);margin-top:12px;min-height:1.4em;transition:color .3s}
+.sim-msg.good{color:var(--sage-d)}
+.sim-msg.warn{color:var(--peach-d)}
+
+/* Station 1 – Water */
+.glasses{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.glass-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;border-radius:14px;transition:transform .35s var(--spring),background .3s}
+.glass-btn:hover{transform:translateY(-4px);background:rgba(191,224,240,.35)}
+.glass-btn:active{transform:scale(.92)}
+.glass-btn svg{width:100%;max-width:44px;height:auto}
+.glass-btn span{font-size:.7rem;font-weight:700;color:var(--ink-3)}
+.glass-btn.full span{color:var(--sky-d)}
+.glass-outline{fill:rgba(255,255,255,.6);stroke:#9CC7DA;stroke-width:2.2}
+.water-fill{fill:url(#waterGrad);transform-box:fill-box;transform:translateY(100%);transition:transform .7s var(--spring)}
+.glass-btn.full .water-fill{transform:translateY(18%)}
+.water-meter{display:flex;align-items:center;gap:10px;margin-top:12px}
+.water-meter .track{flex:1;height:10px;border-radius:999px;background:var(--sky-l);overflow:hidden}
+.water-meter .fill{height:100%;width:0;background:linear-gradient(90deg,#9FD3E8,var(--sky-d));border-radius:999px;transition:width .6s var(--spring)}
+.water-meter b{font-size:.85rem;white-space:nowrap}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px}
+.step-btn{display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;border-radius:16px;background:#fff;border:2px solid transparent;box-shadow:var(--shadow-s);font-size:.84rem;font-weight:600;transition:all .35s var(--spring)}
+.step-btn:hover{transform:translateY(-3px)}
+.step-btn .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--sky-l);color:var(--sky-d);font-weight:800;font-size:.85rem;transition:all .35s}
+.step-btn .e{font-size:1.3rem}
+.step-btn.done{border-color:var(--sage);background:var(--sage-l)}
+.step-btn.done .n{background:var(--sage);color:#fff}
+.step-btn.next{border-color:var(--sky-d);animation:nudge 1.6s ease-in-out infinite}
+.step-btn.shake{animation:shake .4s}
+@keyframes nudge{0%,100%{box-shadow:0 0 0 0 rgba(79,151,184,.35)}50%{box-shadow:0 0 0 7px rgba(79,151,184,0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* Station 2 – Breathing */
+.breath-area{display:flex;flex-direction:column;align-items:center;gap:16px;padding:8px 0}
+.breath-wrap{position:relative;width:min(250px,70vw);aspect-ratio:1;display:grid;place-items:center}
+.breath-ring{position:absolute;inset:0;border-radius:50%;border:2px dashed rgba(125,103,184,.35);animation:spin 30s linear infinite}
+.breath-ring.r2{inset:12%;border:2px solid rgba(168,195,160,.35);animation-direction:reverse;animation-duration:22s}
+.breath-circle{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,var(--lav) 45%,var(--sage) 100%);box-shadow:0 0 50px rgba(154,134,207,.5),inset 0 -10px 30px rgba(95,132,89,.25);transform:scale(.55);transition:transform 1s ease-in-out}
+.breath-circle.hold{animation:holdGlow 1.4s ease-in-out infinite}
+@keyframes holdGlow{0%,100%{box-shadow:0 0 40px rgba(154,134,207,.45)}50%{box-shadow:0 0 80px rgba(154,134,207,.85)}}
+.breath-text{position:relative;z-index:2;text-align:center;pointer-events:none}
+.breath-text .ph{font-family:'Quicksand';font-weight:700;font-size:1.3rem;color:#3d3560}
+.breath-text .ct{font-size:2.6rem;font-weight:800;color:#3d3560;line-height:1.1}
+.breath-text .sb{font-size:.78rem;font-weight:600;color:#5a527a}
+.breath-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.breath-legend .badge.active{background:var(--lav-d);color:#fff;transform:scale(1.08)}
+.breath-legend .badge{transition:all .3s var(--spring)}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* Station 3 – Room */
+.room{
+  --dim:.55;position:relative;height:230px;border-radius:20px;overflow:hidden;margin-bottom:14px;
+  background:linear-gradient(180deg,#FBF3E4 0 64%,#E8D5B5 64% 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)
+}
+.room::after{content:"";position:absolute;inset:0;background:rgba(40,36,70,var(--dim));transition:background .8s var(--ease);pointer-events:none}
+.room-item{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .6s var(--spring);filter:grayscale(1);opacity:.55}
+.room-item .ri-emo{font-size:2.9rem;line-height:1}
+.room-item .ri-label{font-size:.7rem;font-weight:700;background:#fff;padding:.25em .7em;border-radius:999px;box-shadow:var(--shadow-s);white-space:nowrap}
+.room-item.on{filter:none;opacity:1;transform:translateY(-4px) scale(1.06)}
+.room-item.on .ri-emo{filter:drop-shadow(0 0 14px rgba(255,220,120,.9))}
+.room-item.on .ri-label{background:var(--sage);color:#fff}
+.ri-light{top:14px;left:50%;margin-left:-40px}
+.ri-vent{top:26px;left:7%}
+.ri-desk{bottom:18px;left:12%}
+.ri-rest{bottom:18px;right:8%}
+.ri-room-tag{position:absolute;z-index:3;top:12px;right:12px}
+.checklist{display:grid;gap:10px}
+.check-item{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:12px 14px;border-radius:16px;background:#fff;border:2px solid transparent;box-shadow:var(--shadow-s);transition:all .35s var(--spring)}
+.check-item:hover{transform:translateX(4px)}
+.check-item .box{flex:none;width:28px;height:28px;border-radius:9px;border:2px solid var(--peach-d);display:grid;place-items:center;color:#fff;transition:all .35s var(--spring)}
+.check-item .box svg{width:16px;height:16px;transform:scale(0);transition:transform .35s var(--spring)}
+.check-item.on{border-color:var(--sage);background:var(--sage-l)}
+.check-item.on .box{background:var(--sage);border-color:var(--sage)}
+.check-item.on .box svg{transform:scale(1)}
+.check-item strong{display:block;font-size:.95rem}
+.check-item small{color:var(--ink-2);font-size:.82rem}
+
+/* Station 4 – Timer */
+.timer-area{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.timer-ring{position:relative;width:180px;height:180px}
+.timer-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-ring .bgc{fill:none;stroke:var(--sage-l);stroke-width:12}
+.timer-ring .fgc{fill:none;stroke:url(#timerGrad);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.timer-num{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.timer-num b{font-size:2.8rem;font-weight:800;line-height:1;display:block}
+.timer-num small{font-size:.75rem;font-weight:700;color:var(--ink-3)}
+.exercise{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:14px;box-shadow:var(--shadow-s);margin-bottom:12px}
+.exercise .ex-emo{font-size:2.6rem;animation:floatY 2s ease-in-out infinite}
+.exercise strong{display:block}
+.exercise small{color:var(--ink-2)}
+.exercise.swap{animation:popIn .5s var(--spring)}
+.ex-list{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ex-list .badge.active{background:var(--sage-d);color:#fff}
+
+/* Station 5 – Plate */
+.plate-area{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
+.plate{position:relative;width:min(240px,70vw);aspect-ratio:1;border-radius:50%;margin-inline:auto;
+  background:conic-gradient(var(--sage-l) 0 180deg,#FFF1D6 180deg 270deg,var(--peach-l) 270deg 360deg);
+  box-shadow:0 0 0 12px #fff,0 0 0 14px rgba(0,0,0,.05),0 26px 40px -14px rgba(0,0,0,.25)}
+.plate::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(90deg,transparent calc(50% - 1px),rgba(0,0,0,.08) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px))}
+.plate-slot{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;width:44%}
+.plate-slot .ps-emo{font-size:2.2rem;min-height:2.6rem;line-height:1.2}
+.plate-slot .ps-emo.pop{animation:popIn .5s var(--spring)}
+.plate-slot .ps-label{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2)}
+.ps-sayur{right:4%;top:34%}
+.ps-karbo{left:6%;top:56%}
+.ps-protein{left:6%;top:16%}
+.plate-score{text-align:center;margin-top:24px;font-weight:700}
+.food-group{margin-bottom:14px}
+.food-group h4{font-size:.92rem;margin-bottom:8px;display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+.food-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.food{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:16px;background:#fff;border:2px solid transparent;box-shadow:var(--shadow-s);font-size:.76rem;font-weight:600;text-align:center;transition:all .35s var(--spring)}
+.food .fe{font-size:1.7rem;transition:transform .35s var(--spring)}
+.food:hover{transform:translateY(-4px)}
+.food:hover .fe{transform:scale(1.18) rotate(-8deg)}
+.food.sel.good{border-color:var(--sage);background:var(--sage-l)}
+.food.sel.bad{border-color:var(--peach-d);background:var(--peach-l)}
+.feedback{border-radius:16px;padding:12px 14px;font-size:.88rem;font-weight:600;background:#fff;box-shadow:var(--shadow-s);min-height:48px}
+.feedback.good{background:var(--sage-l);color:#3f6439}
+.feedback.bad{background:var(--peach-l);color:#9a4d30}
+.feedback.show{animation:popIn .45s var(--spring)}
+
+/* ---------- QUIZ ---------- */
+.quiz-layout{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:start}
+.meters{padding:20px;position:sticky;top:20px}
+.meters h3{font-size:1.05rem;margin-bottom:14px;display:flex;align-items:center;gap:.4em}
+.meter{margin-bottom:18px;position:relative}
+.meter-top{display:flex;justify-content:space-between;font-weight:700;font-size:.88rem;margin-bottom:6px}
+.meter-track{height:18px;border-radius:999px;background:rgba(0,0,0,.06);overflow:hidden}
+.meter-fill{height:100%;border-radius:999px;transition:width 1.1s var(--spring);position:relative}
+.meter-fill::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.28) 0 8px,transparent 8px 16px);animation:stripes 1s linear infinite}
+.meter-fill.energy{background:linear-gradient(90deg,#F7C59F,var(--peach-d))}
+.meter-fill.mental{background:linear-gradient(90deg,var(--lav),var(--lav-d))}
+.meter.flash .meter-track{animation:flashGlow .9s}
+@keyframes flashGlow{0%{box-shadow:0 0 0 0 rgba(125,103,184,.6)}100%{box-shadow:0 0 0 12px rgba(125,103,184,0)}}
+.float-pop{position:absolute;right:6px;top:-6px;font-weight:800;font-size:1rem;animation:floatPop 1.2s var(--ease) forwards;pointer-events:none}
+.float-pop.up{color:var(--sage-d)}
+.float-pop.down{color:var(--peach-d)}
+@keyframes floatPop{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1;transform:translateY(-4px) scale(1.15)}100%{opacity:0;transform:translateY(-34px)}}
+.avatar{text-align:center;font-size:3.4rem;margin:6px 0 8px;transition:transform .5s var(--spring)}
+.avatar.bounce{animation:popIn .6s var(--spring)}
+.avatar-cap{text-align:center;font-size:.82rem;font-weight:600;color:var(--ink-2)}
+.quiz-dots{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.quiz-dots i{width:12px;height:12px;border-radius:50%;background:rgba(0,0,0,.1);transition:all .4s var(--spring)}
+.quiz-dots i.cur{background:var(--lav-d);transform:scale(1.3)}
+.quiz-dots i.ok{background:var(--sage)}
+.quiz-dots i.no{background:var(--peach-d)}
+.quiz-card{padding:clamp(18px,3vw,30px)}
+.quiz-card.swap{animation:slideUp .6s var(--ease)}
+.q-scene{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,var(--lav-l),var(--peach-l));border-radius:20px;padding:16px;margin-bottom:16px}
+.q-scene .qe{font-size:3rem;animation:floatY 3s ease-in-out infinite}
+.q-scene .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.q-scene h3{font-size:1.15rem}
+.q-text{font-size:1rem;color:var(--ink);margin-bottom:16px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;padding:14px 16px;border-radius:18px;background:#fff;border:2px solid transparent;box-shadow:var(--shadow-s);font-weight:600;font-size:.94rem;transition:all .35s var(--spring)}
+.opt:hover:not(:disabled){transform:translateX(6px);border-color:var(--lav)}
+.opt .k{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--lav-l);color:var(--lav-d);font-weight:800}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--sage);background:var(--sage-l)}
+.opt.right .k{background:var(--sage);color:#fff}
+.opt.wrong{border-color:var(--peach-d);background:var(--peach-l);animation:shake .4s}
+.opt.wrong .k{background:var(--peach-d);color:#fff}
+.opt.dim{opacity:.55}
+.q-feedback{margin-top:16px;display:none}
+.q-feedback.show{display:block;animation:slideUp .5s var(--ease)}
+.q-feedback .feedback{margin-bottom:14px}
+.q-next{display:flex;justify-content:flex-end}
+
+/* ---------- END ---------- */
+#confetti{position:fixed;inset:0;z-index:70;pointer-events:none}
+.end-hero{text-align:center;padding:clamp(22px,4vw,40px);margin-bottom:22px}
+.trophy{font-size:4.2rem;display:inline-block;animation:trophy 2.4s var(--spring) infinite}
+@keyframes trophy{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-12px) rotate(-8deg)}60%{transform:translateY(0) rotate(6deg)}}
+.end-hero h2{font-size:clamp(1.6rem,3.6vw,2.5rem);margin:8px 0}
+.end-hero p{color:var(--ink-2);max-width:60ch;margin-inline:auto}
+.score-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:center;margin-top:22px;text-align:left}
+.score-ring{position:relative;width:220px;height:220px;margin-inline:auto}
+.score-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.score-ring .bgc{fill:none;stroke:rgba(0,0,0,.06);stroke-width:14}
+.score-ring .fgc{fill:none;stroke:url(#scoreGrad);stroke-width:14;stroke-linecap:round}
+.score-ring .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.score-ring .val b{font-size:3.2rem;font-weight:800;line-height:1}
+.score-ring .val small{font-weight:700;color:var(--ink-3);font-size:.78rem}
+.rank{display:inline-flex;margin-bottom:12px;font-size:.95rem}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{background:#fff;border-radius:18px;padding:14px;box-shadow:var(--shadow-s);transition:transform .35s var(--spring)}
+.stat:hover{transform:translateY(-4px)}
+.stat .se{font-size:1.5rem}
+.stat b{display:block;font-size:1.35rem;font-family:'Quicksand'}
+.stat small{color:var(--ink-2);font-weight:600;font-size:.8rem}
+.commit-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.commit-form{padding:22px}
+.commit-form h3{font-size:1.15rem;margin-bottom:6px}
+.commit-form p{font-size:.88rem;color:var(--ink-2);margin-bottom:14px}
+.field{width:100%;padding:.85em 1.1em;border-radius:16px;border:2px solid rgba(125,103,184,.2);background:#fff;font:inherit;font-weight:600;color:var(--ink);transition:border .3s,box-shadow .3s;margin-bottom:14px}
+.field:focus{outline:none;border-color:var(--lav-d);box-shadow:0 0 0 4px rgba(154,134,207,.2)}
+.commit-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.cchip{padding:.55em .95em;border-radius:999px;background:#fff;border:2px solid rgba(125,103,184,.15);font-size:.82rem;font-weight:600;transition:all .35s var(--spring)}
+.cchip:hover{transform:translateY(-2px);border-color:var(--lav)}
+.cchip.on{background:var(--lav-d);border-color:var(--lav-d);color:#fff}
+.commit-card{
+  position:relative;padding:26px;border-radius:28px;overflow:hidden;min-height:360px;
+  background:linear-gradient(150deg,#FFFDF8 0%,var(--lav-l) 50%,var(--sage-l) 100%);
+  border:1px solid #fff;box-shadow:0 30px 60px -28px rgba(92,78,130,.55)
+}
+.commit-card::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--peach);opacity:.35;top:-90px;right:-70px}
+.commit-card::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--sage);opacity:.3;bottom:-80px;left:-60px}
+.cc-inner{position:relative;z-index:1}
+.cc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.cc-title{font-family:'Quicksand';font-size:1.3rem;font-weight:700;margin-bottom:4px}
+.cc-name{font-family:'Quicksand';font-size:1.5rem;font-weight:700;color:var(--lav-d);border-bottom:2px dashed rgba(125,103,184,.35);padding-bottom:6px;margin:6px 0 12px;word-break:break-word}
+.cc-list{list-style:none;display:grid;gap:8px;margin-bottom:16px}
+.cc-list li{background:rgba(255,255,255,.8);border-radius:14px;padding:9px 12px;font-weight:600;font-size:.9rem;animation:slideUp .45s var(--ease)}
+.cc-list li.empty{color:var(--ink-3);font-style:italic;font-weight:500}
+.cc-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;font-size:.78rem;color:var(--ink-2);flex-wrap:wrap}
+.cc-foot b{color:var(--lav-d)}
+.stamp{position:absolute;z-index:2;right:22px;bottom:56px;width:110px;height:110px;border-radius:50%;border:4px double var(--sage-d);color:var(--sage-d);display:grid;place-items:center;text-align:center;font-weight:800;font-size:.72rem;line-height:1.2;transform:rotate(-14deg) scale(0);opacity:0;background:rgba(255,255,255,.6)}
+.commit-card.stamped .stamp{animation:stamp .6s var(--spring) forwards}
+@keyframes stamp{0%{transform:rotate(-14deg) scale(2.4);opacity:0}100%{transform:rotate(-14deg) scale(1);opacity:.92}}
+.credits{text-align:center;padding:24px;margin-top:22px}
+.credits .cred-photo{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:center 20%;margin:0 auto 10px;border:4px solid #fff;box-shadow:var(--shadow-s)}
+.credits h3{font-size:1.2rem}
+.credits p{color:var(--ink-2);font-size:.9rem}
+.end-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,140%);padding:.85em 1.4em;border-radius:999px;background:rgba(56,66,61,.92);color:#fff;font-weight:600;font-size:.92rem;box-shadow:var(--shadow);transition:transform .5s var(--spring);max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translate(-50%,0)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;text-align:center}
+  .hero .feature-chips{justify-content:center}
+  .lead{margin-inline:auto}
+  .quiz-layout{grid-template-columns:1fr}
+  .meters{position:relative;top:0}
+  .commit-layout{grid-template-columns:1fr}
+  .score-grid{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .screen{padding:18px 0 48px}
+  .modal{padding:0;place-items:end center}
+  .modal-card{max-height:94vh;border-radius:26px 26px 0 0}
+  .modal-body{padding:22px 16px 8px}
+  .modal-foot{padding:12px 16px}
+  .modal-foot .btn{width:100%}
+  .glasses{grid-template-columns:repeat(4,1fr)}
+  .timer-area,.plate-area{grid-template-columns:1fr}
+  .timer-ring{margin-inline:auto}
+  .food-opts{grid-template-columns:repeat(3,1fr)}
+  .stats{grid-template-columns:1fr 1fr}
+  .progress-steps .pstep span{display:none}
+  .room{height:210px}
+  .room-item .ri-emo{font-size:2.3rem}
+  .scene-emo{font-size:1.9rem}
+  .scene .scene-theory{top:auto;bottom:10px;right:10px}
+  .scene{padding-bottom:44px}
+  .btn-lg{width:100%}
+  .float-emo{width:38px;height:38px;font-size:1.2rem}
+  .float-emo.e1,.float-emo.e3{left:-16px}
+  .float-emo.e2{right:-16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.15s!important}
+}
+</style>
+</head>
+
+<body>
+<!-- Definisi Gradien SVG Global -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+  <defs>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9FD8F2"/>
+      <stop offset="100%" stop-color="#4F97B8"/>
+    </linearGradient>
+    <linearGradient id="timerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7FA978"/>
+      <stop offset="50%" stop-color="#9A86CF"/>
+      <stop offset="100%" stop-color="#DD7F5C"/>
+    </linearGradient>
+    <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6E9E67"/>
+      <stop offset="55%" stop-color="#8B74CA"/>
+      <stop offset="100%" stop-color="#E58B69"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Latar Belakang Terapung Pastel (Floating Blobs) -->
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+  <div class="dots"></div>
+</div>
+
+<!-- Kanvas Sambutan Confetti -->
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<!-- Butang Kawalan Audio Web Audio API -->
+<button class="sound-toggle glass" id="soundToggle" type="button" aria-label="Togol kesan bunyi" title="Hidupkan / Bisukan Kesan Bunyi">
+  <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+  </svg>
+  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <line x1="23" y1="9" x2="17" y2="15"></line>
+    <line x1="17" y1="9" x2="23" y2="15"></line>
+  </svg>
+</button>
+
+<main class="app">
+  <!-- =========================================================
+       SKRIN 1: LAMAN PERMULAAN (START SCREEN)
+       ========================================================= -->
+  <section class="screen active" id="screen-start" aria-labelledby="mainTitle">
+    <div class="container start-wrap">
+      <div class="hero glass">
+        <!-- Profil & Gambar Pembangun di Muka Hadapan -->
+        <div class="profile reveal" style="--i:0">
+          <div class="photo-frame" id="heroPhotoFrame">
+            <img class="photo" src="hajar.jpg" alt="Potret Hajar Sappe binti Mohd Saum" onerror="this.parentElement.classList.add('no-img')">
+            <div class="photo-fallback" aria-hidden="true">HS</div>
+            <span class="float-emo e1" title="Kesihatan Mental">🧠</span>
+            <span class="float-emo e2" title="Hidrasi &amp; Sanitasi">💧</span>
+            <span class="float-emo e3" title="Kecergasan Fizikal">🏃‍♀️</span>
+            <span class="float-emo e4" title="Pemakanan Seimbang">🥗</span>
+            <span class="photo-badge">🌱 Siswa Guru Sejahtera</span>
+          </div>
+
+          <div class="dev-badge" role="note">
+            <span class="sparkle" aria-hidden="true">✨</span>
+            <span>Dibangunkan oleh: <b>Hajar</b></span>
+          </div>
+
+          <div class="id-card" aria-label="Maklumat Pembangun Projek">
+            <div class="id-card-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                <circle cx="8.5" cy="11" r="2.5"></circle>
+                <path d="M5 17c.8-1.6 2-2.4 3.5-2.4S11.2 15.4 12 17"></path>
+                <line x1="15" y1="9.5" x2="19" y2="9.5"></line>
+                <line x1="15" y1="13.5" x2="18" y2="13.5"></line>
+              </svg>
+              PROFIL PEMBANGUN
+            </div>
+            <div class="id-row">
+              <span class="id-label">Nama Penuh</span>
+              <span class="id-val name">HAJAR SAPPE BINTI MOHD SAUM</span>
+            </div>
+            <div class="id-row">
+              <span class="id-label">Angka Giliran</span>
+              <span class="id-val">2026012310007</span>
+            </div>
+            <div class="id-row">
+              <span class="id-label">No. Kad Pengenalan (I/C)</span>
+              <span class="id-val">070710-12-1522</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kandungan Tajuk Utama & Pengenalan -->
+        <div class="hero-content">
+          <div class="reveal" style="--i:1">
+            <span class="eyebrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2L15 8.5L22 9.3L17 14L18.3 21L12 17.6L5.7 21L7 14L2 9.3L9 8.5L12 2Z"></path>
+              </svg>
+              Aplikasi Permainan Mini Kesejahteraan Kampus • Karya Interaktif oleh: Hajar
+            </span>
+          </div>
+
+          <h1 id="mainTitle" class="reveal" style="--i:2">
+            Strategi Penjagaan <span class="grad">Kesihatan Mental &amp; Fizikal</span> Siswa Guru
+          </h1>
+
+          <p class="lead reveal" style="--i:3">
+            Kesejahteraan holistik merupakan tunjang utama kejayaan seorang bakal pendidik.
+            Melalui kembara interaktif ini, terokai <strong>5 stesen strategi kesihatan berasaskan teori global (WASH, WHO &amp; Sphere Standard)</strong>,
+            uji kebijaksanaan anda dalam simulasi situasi kampus, dan bina kad komitmen kesejahteraan kendiri!
+          </p>
+
+          <div class="feature-chips reveal" style="--i:4" aria-label="Ciri Utama Aplikasi">
+            <div class="chip"><span class="ce" aria-hidden="true">🗺️</span><span>5 Stesen Kampus Berlabel</span></div>
+            <div class="chip"><span class="ce" aria-hidden="true">🎮</span><span>5 Simulasi Mini Interaktif</span></div>
+            <div class="chip"><span class="ce" aria-hidden="true">⚡</span><span>Kuiz &amp; Bar Tenaga Siswa</span></div>
+            <div class="chip"><span class="ce" aria-hidden="true">🏅</span><span>Kad Komitmen Digital</span></div>
+          </div>
+
+          <div class="reveal" style="--i:5">
+            <button class="btn btn-primary btn-lg pulse" id="btnStartJourney" type="button">
+              <span>Mula Kembara Kesihatan</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <p class="hint">🔊 Dilengkapi kesan audio lembut interaktif (Web Audio API) • Sesuai untuk komputer riba &amp; telefon pintar</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="foot-note reveal" style="--i:6">
+        Karya Interaktif oleh: <b>Hajar</b> (HAJAR SAPPE BINTI MOHD SAUM • 2026012310007) • Sasaran: Komuniti Kampus &amp; Siswa Guru
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SKRIN 2: PETA KAMPUS INTERAKTIF (5 STESEN STRATEGI)
+       ========================================================= -->
+  <section class="screen" id="screen-map" aria-labelledby="mapTitle">
+    <div class="container">
+      <header class="screen-head glass reveal" style="--i:0">
+        <div class="brand">
+          <img src="hajar.jpg" alt="Hajar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <span class="mini-fb" style="display:none" aria-hidden="true">H</span>
+          <div>
+            <small>Dibangunkan oleh: Hajar</small>
+            <strong>Kembara Kesejahteraan Siswa Guru</strong>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="step-pill">Fasa 1 / 2 • Peta Kampus Interaktif</span>
+          <button class="btn btn-soft" id="btnBackStart" type="button" style="padding:.5em 1em;font-size:.84rem">
+            ← Laman Utama
+          </button>
+        </div>
+      </header>
+
+      <div class="section-title reveal" style="--i:1">
+        <span class="badge sage">🏫 Peta Ekosistem Kampus Sejahtera</span>
+        <h2 id="mapTitle">5 Stesen Strategi Penjagaan Kesihatan</h2>
+        <p>Klik pada setiap kad stesen di bawah dan lengkapkan simulasi mini di dalamnya untuk mengisi bar kemajuan kesejahteraan anda.</p>
+      </div>
+
+      <!-- Bar Kemajuan (Progress Bar) -->
+      <div class="progress-card glass reveal" style="--i:2" aria-live="polite">
+        <div class="progress-top">
+          <strong>🌿 Kemajuan Eksplorasi Strategi Kampus</strong>
+          <span id="mapProgressText">0 / 5 Stesen Selesai (0%)</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" id="mapProgressBarAria">
+          <div class="progress-fill" id="mapProgressFill" style="width:0%"></div>
+        </div>
+        <div class="progress-steps" id="mapProgressSteps">
+          <div class="pstep" data-pstep="1"><i>1</i><span>WASH</span></div>
+          <div class="pstep" data-pstep="2"><i>2</i><span>Emosi</span></div>
+          <div class="pstep" data-pstep="3"><i>3</i><span>Sphere</span></div>
+          <div class="pstep" data-pstep="4"><i>4</i><span>Fizikal</span></div>
+          <div class="pstep" data-pstep="5"><i>5</i><span>Nutrisi</span></div>
+        </div>
+      </div>
+
+      <!-- Grid 5 Kad Stesen Interaktif -->
+      <div class="station-grid" id="stationGrid"></div>
+
+      <!-- Tindakan Seterusnya -->
+      <div class="map-actions reveal" style="--i:4">
+        <button class="btn btn-primary btn-lg" id="btnToQuiz" type="button" disabled>
+          <span>Teruskan ke Simulasi Senario Siswa Guru</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+        <small id="mapUnlockHint">🔒 Lengkapkan kesemua 5 stesen strategi di atas untuk membuka cabaran kuiz situasi kampus.</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SKRIN 3: SIMULASI SENARIO SISWA GURU (KUIZ INTERAKTIF)
+       ========================================================= -->
+  <section class="screen" id="screen-quiz" aria-labelledby="quizTitle">
+    <div class="container">
+      <header class="screen-head glass reveal" style="--i:0">
+        <div class="brand">
+          <img src="hajar.jpg" alt="Hajar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <span class="mini-fb" style="display:none" aria-hidden="true">H</span>
+          <div>
+            <small>Dibangunkan oleh: Hajar</small>
+            <strong>Simulasi Senario Harian Siswa Guru</strong>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="step-pill">Fasa 2 / 2 • Kuiz Situasi Kampus</span>
+          <button class="btn btn-soft" id="btnBackMap" type="button" style="padding:.5em 1em;font-size:.84rem">
+            ← Peta Kampus
+          </button>
+        </div>
+      </header>
+
+      <div class="section-title reveal" style="--i:1">
+        <span class="badge lav">🎯 Uji Keputusan Kesejahteraan Kendiri</span>
+        <h2 id="quizTitle">Simulasi Senario Siswa Guru</h2>
+        <p>Pilih tindakan paling bijak bagi setiap situasi harian di kampus dan perhatikan peningkatan Bar Tenaga &amp; Mental Siswa!</p>
+      </div>
+
+      <div class="quiz-layout">
+        <!-- Panel Bar Tenaga & Mental Siswa -->
+        <aside class="meters glass reveal" style="--i:2" aria-label="Status Tenaga dan Mental Siswa">
+          <h3>⚡ Bar Tenaga &amp; Mental Siswa</h3>
+
+          <div class="meter" id="meterEnergyBox">
+            <div class="meter-top">
+              <span>🏃‍♀️ Tenaga Fizikal</span>
+              <span id="energyVal">55%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill energy" id="energyFill" style="width:55%"></div>
+            </div>
+          </div>
+
+          <div class="meter" id="meterMentalBox">
+            <div class="meter-top">
+              <span>🧠 Kesejahteraan Mental</span>
+              <span id="mentalVal">55%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill mental" id="mentalFill" style="width:55%"></div>
+            </div>
+          </div>
+
+          <div class="avatar" id="studentAvatar" aria-hidden="true">🙂</div>
+          <p class="avatar-cap" id="studentAvatarCap">Bersedia menghadapi cabaran harian di kampus!</p>
+
+          <div class="quiz-dots" id="quizDots" aria-label="Kemajuan Soalan"></div>
+        </aside>
+
+        <!-- Kad Soalan Senario -->
+        <div class="quiz-card glass reveal" style="--i:3" id="quizCard" aria-live="polite">
+          <div class="q-scene">
+            <div class="qe" id="qEmoji" aria-hidden="true">📚</div>
+            <div>
+              <div class="badges" id="qBadges"></div>
+              <h3 id="qHeading">Situasi 1</h3>
+            </div>
+          </div>
+
+          <p class="q-text" id="qText"></p>
+
+          <div class="opts" id="qOpts"></div>
+
+          <div class="q-feedback" id="qFeedbackWrap">
+            <div class="feedback" id="qFeedbackBox"></div>
+            <div class="q-next">
+              <button class="btn btn-primary" id="btnNextQuestion" type="button">
+                <span id="btnNextLabel">Situasi Seterusnya</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SKRIN 4: SKRIN PENUTUP & KAD KOMITMEN DIGITAL
+       ========================================================= -->
+  <section class="screen" id="screen-end" aria-labelledby="endTitle">
+    <div class="container">
+      <header class="screen-head glass reveal" style="--i:0">
+        <div class="brand">
+          <img src="hajar.jpg" alt="Hajar" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <span class="mini-fb" style="display:none" aria-hidden="true">H</span>
+          <div>
+            <small>Karya Interaktif oleh: Hajar</small>
+            <strong>Sijil &amp; Kad Komitmen Kesejahteraan</strong>
+          </div>
+        </div>
+        <span class="step-pill">✨ Kembara Lengkap!</span>
+      </header>
+
+      <!-- Ringkasan Markah Kesejahteraan -->
+      <div class="end-hero glass reveal" style="--i:1">
+        <span class="trophy" aria-hidden="true">🏆</span>
+        <h2 id="endTitle">Tahniah, Siswa Guru Sejahtera!</h2>
+        <p id="endSummaryMsg">
+          Anda telah berjaya meneroka kesemua 5 stesen strategi kesihatan kampus dan menamatkan simulasi senario harian dengan cemerlang!
+        </p>
+
+        <div class="score-grid">
+          <div class="score-ring" aria-label="Markah Kesejahteraan Keseluruhan">
+            <svg viewBox="0 0 220 220">
+              <circle class="bgc" cx="110" cy="110" r="92"></circle>
+              <circle class="fgc" id="finalScoreCircle" cx="110" cy="110" r="92" stroke-dasharray="578.05" stroke-dashoffset="578.05"></circle>
+            </svg>
+            <div class="val">
+              <div>
+                <b id="finalScoreNum">0%</b>
+                <small>SKOR SEJAHTERA</small>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="badge lav rank" id="finalRankBadge">🌟 Duta Kesejahteraan Siswa Guru</span>
+            <div class="stats">
+              <div class="stat">
+                <span class="se" aria-hidden="true">🗺️</span>
+                <b id="statStations">5 / 5</b>
+                <small>Stesen Strategi Kampus</small>
+              </div>
+              <div class="stat">
+                <span class="se" aria-hidden="true">🎯</span>
+                <b id="statQuiz">3 / 3</b>
+                <small>Keputusan Bijak Senario</small>
+              </div>
+              <div class="stat">
+                <span class="se" aria-hidden="true">🏃‍♀️</span>
+                <b id="statEnergy">100%</b>
+                <small>Tenaga Fizikal Siswa</small>
+              </div>
+              <div class="stat">
+                <span class="se" aria-hidden="true">🧠</span>
+                <b id="statMental">100%</b>
+                <small>Kesejahteraan Mental</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kad Komitmen Digital Interaktif -->
+      <div class="commit-layout reveal" style="--i:2">
+        <div class="commit-form glass">
+          <span class="badge sage" style="margin-bottom:8px">📝 Janji Temu Kendiri</span>
+          <h3>Bina Kad Komitmen Digital Anda</h3>
+          <p>Masukkan nama anda dan pilih amalan kesejahteraan harian yang ingin anda kekalkan sepanjang pengajian &amp; praktikum:</p>
+
+          <label for="commitNameInput" style="display:block;font-size:.78rem;font-weight:700;color:var(--ink-2);margin-bottom:6px">NAMA SISWA GURU</label>
+          <input class="field" id="commitNameInput" type="text" maxlength="50" placeholder="Contoh: Cikgu Aisyah / Nama Anda" value="Siswa Guru Cemerlang">
+
+          <div style="font-size:.78rem;font-weight:700;color:var(--ink-2);margin-bottom:8px">PILIH IKRAR AMALAN SIHAT (KLIK UNTUK PILIH):</div>
+          <div class="commit-chips" id="commitChips"></div>
+
+          <div class="row-btns" style="justify-content:flex-start">
+            <button class="btn btn-primary" id="btnStampCommit" type="button">
+              <span>💮 Cop &amp; Sahkan Komitmen</span>
+            </button>
+            <button class="btn btn-soft" id="btnDownloadCard" type="button">
+              <span>⬇️ Muat Turun Kad (PNG)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pratonton Kad Komitmen Digital -->
+        <div class="commit-card stamped" id="commitCardPreview" aria-label="Kad Komitmen Digital">
+          <div class="cc-inner">
+            <div class="cc-top">
+              <span class="badge lav">🌿 Kad Komitmen Digital Siswa Guru</span>
+              <span class="badge sage" id="ccDateBadge">2026</span>
+            </div>
+            <div class="cc-title">Ikrar Kesejahteraan Mental &amp; Fizikal</div>
+            <div style="font-size:.82rem;color:var(--ink-2)">Saya dengan penuh kesedaran beriltizam mengamalkan gaya hidup sihat sebagai bakal pendidik:</div>
+            <div class="cc-name" id="ccNameDisplay">Siswa Guru Cemerlang</div>
+            <ul class="cc-list" id="ccPledgeList"></ul>
+            <div class="cc-foot">
+              <div>
+                Skor Kesejahteraan: <b id="ccScoreFoot">100%</b><br>
+                Inisiatif Kampus Sejahtera (WASH • WHO • Sphere)
+              </div>
+              <div style="text-align:right">
+                Karya Interaktif oleh:<br>
+                <b>Hajar (2026012310007)</b>
+              </div>
+            </div>
+          </div>
+          <div class="stamp" aria-hidden="true">
+            <span>KOMITMEN<br>DISAHKAN<br>★ SEJAHTERA ★</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kredit Penutup Pembangun -->
+      <footer class="credits glass reveal" style="--i:3">
+        <img class="cred-photo" src="hajar.jpg" alt="Hajar Sappe binti Mohd Saum" onerror="this.style.display='none'">
+        <div class="dev-badge" style="margin-bottom:10px">
+          <span class="sparkle" aria-hidden="true">✨</span>
+          <span>Kredit Penutup &amp; Pembangunan oleh: <b>Hajar</b></span>
+        </div>
+        <h3>HAJAR SAPPE BINTI MOHD SAUM</h3>
+        <p style="margin-top:4px;font-weight:700;color:var(--lav-d)">
+          Angka Giliran: 2026012310007 &nbsp;•&nbsp; No. K/P: 070710-12-1522
+        </p>
+        <p style="max-width:60ch;margin:10px auto 0">
+          Terima kasih kerana menyertai kembara interaktif <em>Strategi Penjagaan Kesihatan Mental &amp; Fizikal Siswa Guru</em>.
+          Semoga setiap ilmu &amp; simulasi kecil ini menjadi pemangkin kesejahteraan diri demi melahirkan warga pendidik yang ceria, berdaya tahan, dan berinspirasi!
+        </p>
+
+        <div class="end-actions">
+          <button class="btn btn-primary btn-lg" id="btnReplayAll" type="button">
+            <span>🔄 Main Semula Kembara</span>
+          </button>
+          <button class="btn btn-soft btn-lg" id="btnRevisitMap" type="button">
+            <span>🗺️ Ulang Kaji Peta Kampus</span>
+          </button>
+          <button class="btn btn-peach btn-lg" id="btnCelebrateAgain" type="button">
+            <span>🎉 Pancarkan Confetti!</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<!-- =========================================================
+     MODAL SIMULASI STESEN KAMPUS
+     ========================================================= -->
+<div class="modal" id="stationModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-card glass">
+    <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Tutup Tetingkap Stesen">✕</button>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <span id="modalFootStatus">Lengkapkan aktiviti interaktif di atas untuk mengesahkan stesen ini.</span>
+      <button class="btn btn-primary" id="modalCompleteBtn" type="button" disabled>
+        <span>✓ Tandakan Selesai &amp; Kembali ke Peta</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifikasi Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* =========================================================
+     1. ENJIN BUNYI LEMBUT (WEB AUDIO API - TANPA FAIL LUARAN)
+     ========================================================= */
+  const Sound = (() => {
+    let ctx = null;
+    let muted = false;
+
+    function getCtx() {
+      if (muted) return null;
+      if (!ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) ctx = new AudioCtx();
+      }
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      return ctx;
+    }
+
+    function tone(freq, duration = 0.09, type = 'sine', gainPeak = 0.08, delay = 0, slideTo = null) {
+      const c = getCtx();
+      if (!c) return;
+      const now = c.currentTime + delay;
+      const osc = c.createOscillator();
+      const g = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      if (slideTo) {
+        osc.frequency.exponentialRampToValueAtTime(Math.max(40, slideTo), now + duration);
+      }
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(gainPeak, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(g);
+      g.connect(c.destination);
+      osc.start(now);
+      osc.stop(now + duration + 0.02);
+    }
+
+    return {
+      isMuted: () => muted,
+      toggleMute() {
+        muted = !muted;
+        if (!muted) this.click();
+        return muted;
+      },
+      click() {
+        tone(560, 0.065, 'sine', 0.06, 0, 680);
+      },
+      pop() {
+        tone(440, 0.08, 'triangle', 0.07, 0, 740);
+      },
+      water(level = 1) {
+        const base = 420 + level * 42;
+        tone(base, 0.11, 'sine', 0.08, 0, base * 1.38);
+      },
+      tick() {
+        tone(780, 0.04, 'sine', 0.04, 0, 720);
+      },
+      breathCue(phase) {
+        if (phase === 'inhale') {
+          tone(392, 0.35, 'sine', 0.05, 0, 523.25);
+        } else if (phase === 'hold') {
+          tone(523.25, 0.25, 'triangle', 0.04);
+        } else {
+          tone(523.25, 0.4, 'sine', 0.05, 0, 349.23);
+        }
+      },
+      success() {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          tone(f, 0.18, 'triangle', 0.075, i * 0.075);
+        });
+      },
+      softWarn() {
+        tone(310, 0.13, 'sine', 0.065, 0, 250);
+        tone(250, 0.16, 'sine', 0.06, 0.1, 210);
+      },
+      fanfare() {
+        const notes = [523.25, 659.25, 783.99, 1046.5, 987.77, 1046.5];
+        const times = [0, 0.09, 0.18, 0.28, 0.44, 0.56];
+        notes.forEach((f, i) => tone(f, 0.26, 'triangle', 0.085, times[i]));
+      }
+    };
+  })();
+
+  /* =========================================================
+     2. DATA 5 STESEN STRATEGI KESIHATAN KAMPUS
+     ========================================================= */
+  const STATIONS = [
+    {
+      id: 1,
+      num: 'Strategi 1',
+      short: 'WASH',
+      title: 'Sanitasi, Air Bersih & Higen Kendiri',
+      theory: 'Teori WASH (WHO / UNICEF)',
+      location: '🏠 Asrama & Kemudahan Kampus',
+      badgeClass: 'sky',
+      accent: 'var(--sky)',
+      accentL: 'var(--sky-l)',
+      accentD: 'var(--sky-d)',
+      emoji: '💧',
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>`,
+      summary: 'Kekalkan hidrasi optimum 8 gelas sehari dan amalkan langkah mencuci tangan yang betul di kolej kediaman bagi mencegah jangkitan penyakit.',
+      info: '<b>Teori WASH (Water, Sanitation &amp; Hygiene):</b> Akses kepada air minuman bersih, sanitasi asrama yang terjaga, dan amalan higen tangan terbukti mengurangkan risiko jangkitan penyakit berjangkit di kampus serta mengekalkan fokus kognitif semasa kuliah.',
+      sceneItems: [
+        { emo: '🚰', label: 'Penapis Air Bersih' },
+        { emo: '🧼', label: 'Sinki & Sabun Antiseptik' },
+        { emo: '🚿', label: 'Sanitasi Asrama Bersih' },
+        { emo: '🧴', label: 'Sanitizer Poket Siswa' }
+      ]
+    },
+    {
+      id: 2,
+      num: 'Strategi 2',
+      short: 'Emosi',
+      title: 'Regulasi Emosi & Pengurusan Stres Praktikum',
+      theory: 'Teori Kesihatan Mental WHO',
+      location: '🌳 Taman Rekreasi Kampus',
+      badgeClass: 'lav',
+      accent: 'var(--lav)',
+      accentL: 'var(--lav-l)',
+      accentD: 'var(--lav-d)',
+      emoji: '🧘‍♀️',
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`,
+      summary: 'Tenangkan sistem saraf daripada tekanan RPH, tugasan, dan praktikum melalui latihan Simulasi Pernafasan Terpandu 4-7-8.',
+      info: '<b>Teori Kesihatan Mental WHO:</b> Kesihatan mental ialah keadaan kesejahteraan di mana siswa guru menyedari keupayaan diri, mampu mengurus stres normal kehidupan akademik/praktikum, dan berfungsi secara produktif. Teknik pernafasan 4-7-8 mengaktifkan sistem saraf parasimpatetik untuk menurunkan kadar degupan jantung.',
+      sceneItems: [
+        { emo: '🌲', label: 'Laman Hijau Rimbun' },
+        { emo: '🪑', label: 'Bangku Refleksi Tenang' },
+        { emo: '📓', label: 'Jurnal Syukur Harian' },
+        { emo: '🌬️', label: 'Zon Nafas Segar' }
+      ]
+    },
+    {
+      id: 3,
+      num: 'Strategi 3',
+      short: 'Sphere',
+      title: 'Persekitaran Belajar & Kediaman Kondusif',
+      theory: 'Sphere Standard (Kediaman Sihat)',
+      location: '🛋️ Bilik Belajar Asrama',
+      badgeClass: 'peach',
+      accent: 'var(--peach)',
+      accentL: 'var(--peach-l)',
+      accentD: 'var(--peach-d)',
+      emoji: '🏡',
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`,
+      summary: 'Audit dan hidupkan bilik belajar asrama anda melalui senarai semak pencahayaan, pengudaraan, ergonomik meja, dan ruang rehat selamat.',
+      info: '<b>Sphere Standard (Shelter &amp; Settlement):</b> Ruang kediaman yang selamat, mempunyai pengudaraan silang, pencahayaan mencukupi, dan susun atur ergonomik melindungi kesihatan fizikal (postur tulang belakang &amp; mata) serta memberi rasa selamat psikologi kepada penghuni asrama.',
+      sceneItems: [
+        { emo: '💡', label: 'Cahaya Optimum' },
+        { emo: '🪟', label: 'Aliran Udara Segar' },
+        { emo: '🪑', label: 'Postur Ergonomik' },
+        { emo: '🛏️', label: 'Ruang Rehat Selamat' }
+      ]
+    },
+    {
+      id: 4,
+      num: 'Strategi 4',
+      short: 'Fizikal',
+      title: 'Aktiviti Fizikal & Regangan Mikro',
+      theory: 'Garis Panduan Aktiviti Fizikal WHO',
+      location: '🏟️ Pusat Sukan & Bilik Kuliah',
+      badgeClass: 'sage',
+      accent: 'var(--sage)',
+      accentL: 'var(--sage-l)',
+      accentD: 'var(--sage-d)',
+      emoji: '🤸‍♀️',
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>`,
+      summary: 'Elakkan kelesuan duduk terlalu lama di dewan kuliah dengan pemasa interaktif senaman regangan mikro 30 saat.',
+      info: '<b>Garis Panduan Aktiviti Fizikal WHO:</b> Orang dewasa disarankan melakukan 150–300 minit aktiviti aerobik sederhana seminggu dan mencelah tempoh duduk berpanjangan dengan <em>regangan mikro</em> bagi melancarkan peredaran darah ke otak serta melegakan ketegangan otot leher dan bahu.',
+      sceneItems: [
+        { emo: '🏃‍♀️', label: 'Trek Riadah Petang' },
+        { emo: '🧘', label: 'Sudut Regangan Kuliah' },
+        { emo: '⏱️', label: 'Rehat Aktif 30 Saat' },
+        { emo: '👟', label: 'Gaya Hidup Aktif' }
+      ]
+    },
+    {
+      id: 5,
+      num: 'Strategi 5',
+      short: 'Nutrisi',
+      title: 'Pemakanan Seimbang & Tenaga Akademik',
+      theory: 'Panduan Nutrisi WHO & Pinggan Sihat',
+      location: '🍽️ Kafeteria Kampus',
+      badgeClass: 'peach',
+      accent: 'var(--sage)',
+      accentL: 'var(--sage-l)',
+      accentD: 'var(--sage-d)',
+      emoji: '🥗',
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
+      summary: 'Main permainan mini "Bina Pinggan Sihat Siswa" dengan memilih kombinasi karbohidrat kompleks, protein berkualiti, dan sayur-buah segar.',
+      info: '<b>Panduan Nutrisi Seimbang WHO &amp; Suku-Suku Separuh:</b> Pembahagian pinggan ¼ karbohidrat kompleks, ¼ protein rendah lemak, dan ½ sayur-sayuran serta buah-buahan membekalkan glukosa stabil untuk daya ingatan, imuniti kuat, dan mengelakkan rasa mengantuk ketika kuliah petang.',
+      sceneItems: [
+        { emo: '🥦', label: '½ Sayur & Buah Segar' },
+        { emo: '🍚', label: '¼ Karbohidrat Kompleks' },
+        { emo: '🐟', label: '¼ Protein Berkualiti' },
+        { emo: '🥛', label: 'Kurang Gula & Garam' }
+      ]
+    }
+  ];
+
+  // Langkah Cuci Tangan (Stesen 1)
+  const HANDWASH_STEPS = [
+    { id: 1, emo: '🚰', text: 'Basahkan tangan & sapu sabun' },
+    { id: 2, emo: '🤲', text: 'Gosok kedua-dua tapak tangan' },
+    { id: 3, emo: '🖐️', text: 'Gosok celah jari & belakang tangan' },
+    { id: 4, emo: '💅', text: 'Bersihkan kuku & ibu jari' },
+    { id: 5, emo: '💧', text: 'Bilas bersih dengan air mengalir' },
+    { id: 6, emo: '🧻', text: 'Keringkan dengan tuala/tisu bersih' }
+  ];
+
+  // Senarai Semak Bilik Asrama (Stesen 3)
+  const ROOM_CHECKS = [
+    {
+      key: 'light',
+      title: '💡 Pencahayaan Mencukupi & Mesra Mata',
+      desc: 'Buka langsir pada waktu siang dan gunakan lampu meja putih lembut supaya mata tidak cepat letih membaca.',
+      roomTarget: 'ri-light'
+    },
+    {
+      key: 'vent',
+      title: '🪟 Pengudaraan Silang yang Baik',
+      desc: 'Pastikan tingkap dibuka secara berkala agar udara segar masuk serta mengurangkan kelembapan & habuk.',
+      roomTarget: 'ri-vent'
+    },
+    {
+      key: 'desk',
+      title: '🪑 Ergonomik Meja & Kerusi Belajar',
+      desc: 'Laras ketinggian skrin separas mata, duduk tegak dengan sokongan belakang, dan susun meja tanpa serabut.',
+      roomTarget: 'ri-desk'
+    },
+    {
+      key: 'rest',
+      title: '🛏️ Ruang Rehat Bersih, Kemas & Selamat',
+      desc: 'Asingkan zon tidur daripada timbunan kertas tugasan dan pastikan laluan bilik bebas bahaya tersadung.',
+      roomTarget: 'ri-rest'
+    }
+  ];
+
+  // Pilihan Makanan "Bina Pinggan Sihat Siswa" (Stesen 5)
+  const PLATE_FOODS = {
+    karbo: {
+      label: '¼ Karbohidrat (Sumber Tenaga Utama)',
+      badge: 'Suku Pertama',
+      items: [
+        { id: 'beras_perang', name: 'Nasi Perang', emo: '🍚', good: true, msg: 'Hebat! Nasi perang kaya serat dan membebaskan tenaga secara berperingkat tanpa menyebabkan cepat mengantuk.' },
+        { id: 'roti_gandum', name: 'Roti Bijirin Penuh', emo: '🍞', good: true, msg: 'Pilihan bijak! Bijirin penuh membekalkan vitamin B kompleks untuk kecergasan otak semasa kuliah.' },
+        { id: 'mi_segera', name: 'Mi Segera Goreng Berganda', emo: '🍜', good: false, msg: 'Kurang sesuai sebagai menu harian kerana tinggi natrium (garam) dan lemak tepu yang membuatkan badan cepat lesu.' }
+      ]
+    },
+    protein: {
+      label: '¼ Protein (Bina Tisu & Fokus)',
+      badge: 'Suku Kedua',
+      items: [
+        { id: 'ikan_bakar', name: 'Ikan Bakar / Kukus', emo: '🐟', good: true, msg: 'Terbaik! Ikan membekalkan protein bersih dan asid lemak Omega-3 yang menyokong daya ingatan siswa guru.' },
+        { id: 'ayam_panggang', name: 'Ayam Panggang & Tauhu', emo: '🍗', good: true, msg: 'Sangat baik! Gabungan protein tanpa lemak berlebihan memastikan rasa kenyang lebih lama.' },
+        { id: 'sosej_goreng', name: 'Sosej & Nuget Proses', emo: '🌭', good: false, msg: 'Makanan terproses tinggi pengawet dan lemak trans. Cuba tukar kepada sumber protein segar seperti ikan atau ayam panggang!' }
+      ]
+    },
+    sayur: {
+      label: '½ Sayur & Buah (Vitamin & Serat)',
+      badge: 'Separuh Pinggan',
+      items: [
+        { id: 'sayur_buah', name: 'Brokoli, Bayam & Epal', emo: '🥦🍎', good: true, msg: 'Sempurna! Separuh pinggan sayur hijau & buah segar menguatkan sistem imun dan melancarkan penghadaman.' },
+        { id: 'ulam_betik', name: 'Ulam Segar & Betik', emo: '🥗🍊', good: true, msg: 'Cemerlang! Kaya antioksidan dan Vitamin C semula jadi untuk melawan kelesuan akademik.' },
+        { id: 'air_manis', name: 'Minuman Boba Tinggi Gula', emo: '🧋', good: false, msg: 'Minuman manis tidak menggantikan serat sayur & buah malah menyebabkan lonjakan gula diikuti keletihan mendadak (sugar crash).' }
+      ]
+    }
+  };
+
+  /* =========================================================
+     3. DATA KUIZ SIMULASI SENARIO SISWA GURU (SKRIN 3)
+     ========================================================= */
+  const QUIZ_QUESTIONS = [
+    {
+      id: 1,
+      emoji: '📅',
+      category: 'Pengurusan Jadual & Praktikum',
+      theory: 'Kesihatan Mental & Fizikal WHO',
+      heading: 'Situasi 1: Jadual Kuliah & Persediaan Praktikum Padat',
+      question: 'Minggu ini jadual kuliah anda penuh dari jam 8.00 pagi hingga 5.00 petang, diikuti penyediaan Rancangan Pengajaran Harian (RPH) untuk sesi mikro-pengajaran esok. Badan mula terasa tegang dan fikiran bercelaru. Apakah strategi terbaik?',
+      options: [
+        {
+          key: 'A',
+          text: 'Terus berjaga sehingga 4.00 pagi sambil minum 3 tin minuman bertenaga manis tanpa makan malam.',
+          correct: false,
+          energyDelta: -10,
+          mentalDelta: -10,
+          feedback: 'Kurang tepat. Mengorbankan waktu tidur dan mengambil kafein/gula berlebihan menjejaskan memori jangka pendek serta membuatkan suara & emosi tidak stabil semasa mengajar esok.'
+        },
+        {
+          key: 'B',
+          text: 'Susun keutamaan tugas dengan teknik blok masa, lakukan regangan 30 saat & pernafasan 4-7-8, makan malam seimbang, dan tidur mencukupi 7 jam.',
+          correct: true,
+          energyDelta: +15,
+          mentalDelta: +15,
+          feedback: 'Tepat sekali! Menggabungkan perancangan masa, jeda regangan mikro, pernafasan tenang, dan tidur berkualiti memastikan otak segar serta keyakinan tinggi di hadapan kelas.'
+        },
+        {
+          key: 'C',
+          text: 'Tangguhkan semua penyediaan RPH sehingga pagi esok dan menatal media sosial sepanjang malam untuk melupakan stres.',
+          correct: false,
+          energyDelta: -5,
+          mentalDelta: -10,
+          feedback: 'Elakkan penangguhan pasif (revenge bedtime procrastination) kerana ia akan menggandakan keresahan pada keesokan pagi.'
+        }
+      ]
+    },
+    {
+      id: 2,
+      emoji: '📚',
+      category: 'Tekanan Tugasan & Emosi',
+      theory: 'Regulasi Emosi WHO & Nutrisi',
+      heading: 'Situasi 2: Tugasan Berkumpulan Bertimbun di Minggu Peperiksaan',
+      question: 'Tiga tugasan kerja kursus perlu dihantar pada minggu yang sama. Anda mula berasa berdebar-debar, hilang selera makan, dan sukar menumpukan perhatian di bilik asrama. Bagaimanakah tindakan paling sejahtera?',
+      options: [
+        {
+          key: 'A',
+          text: 'Pecahkan tugasan kepada langkah kecil, berbincang secara harmoni bersama rakan kumpulan/pensyarah, kekalkan minum 8 gelas air kosong, dan ambil rehat minda seketika di taman.',
+          correct: true,
+          energyDelta: +15,
+          mentalDelta: +15,
+          feedback: 'Sangat bijak! Sokongan sosial yang positif, pembahagian tugasan kecil, serta hidrasi mencukupi meredakan hormon kortisol (stres) dan mengembalikan fokus akademik.'
+        },
+        {
+          key: 'B',
+          text: 'Mengurung diri seorang diri di bilik gelap tanpa makan seharian sambil memendam perasaan marah terhadap ahli kumpulan.',
+          correct: false,
+          energyDelta: -10,
+          mentalDelta: -10,
+          feedback: 'Memencilkan diri dan melangkau waktu makan boleh menurunkan paras glukosa otak serta memburukkan keletihan emosi (burnout).'
+        },
+        {
+          key: 'C',
+          text: 'Menyiapkan tugasan sambil makan makanan ringan tinggi garam sahaja tanpa minum air kosong.',
+          correct: false,
+          energyDelta: -8,
+          mentalDelta: -5,
+          feedback: 'Dehidrasi ringan sebanyak 2% sahaja sudah boleh menyebabkan sakit kepala dan kemerosotan tumpuan belajar.'
+        }
+      ]
+    },
+    {
+      id: 3,
+      emoji: '🏠',
+      category: 'Higen & Persekitaran Asrama',
+      theory: 'Teori WASH & Sphere Standard',
+      heading: 'Situasi 3: Kebersihan Ruang Kediaman & Pencegahan Jangkitan',
+      question: 'Beberapa rakan sekelas mengalami selesema selepas minggu aktiviti luar. Sementara itu, meja belajar bilik asrama anda dipenuhi sisa bungkusan makanan dan tingkap jarang dibuka. Apakah langkah pencegahan terbaik?',
+      options: [
+        {
+          key: 'A',
+          text: 'Biarkan sahaja bungkusan makanan di atas meja kerana terlalu sibuk dan tutup semua tingkap rapat sepanjang minggu.',
+          correct: false,
+          energyDelta: -10,
+          mentalDelta: -8,
+          feedback: 'Ruang tertutup tanpa pengudaraan dan sisa makanan mengundang bakteria, serangga perosak, serta menjejaskan kualiti udara pernafasan.'
+        },
+        {
+          key: 'B',
+          text: 'Sembur pewangi bilik dengan banyak tanpa membuang sampah atau membasuh tangan.',
+          correct: false,
+          energyDelta: -5,
+          mentalDelta: -5,
+          feedback: 'Pewangi hanya menutup bau buat sementara tetapi tidak menghapuskan kuman mahupun menggantikan pengudaraan semula jadi.'
+        },
+        {
+          key: 'C',
+          text: 'Bersihkan sisa makanan segera, buka tingkap untuk pengudaraan segar, susun meja secara ergonomik, dan amalkan cuci tangan bersabun selepas pulang dari kuliah.',
+          correct: true,
+          energyDelta: +15,
+          mentalDelta: +15,
+          feedback: 'Cemerlang! Gabungan prinsip WASH (kebersihan tangan & sanitasi) serta Sphere Standard (pengudaraan & kekemasan bilik) melindungi imuniti fizikal dan memberi ketenangan minda!'
+        }
+      ]
+    }
+  ];
+
+  // Pilihan Ikrar Kad Komitmen Digital (Skrin 4)
+  const PLEDGE_OPTIONS = [
+    '💧 Minum sekurang-kurangnya 8 gelas air kosong setiap hari',
+    '🧘‍♀️ Amalkan pernafasan 4-7-8 apabila berdepan stres praktikum',
+    '🪟 Pastikan bilik belajar cerah, kemas & berpengudaraan segar',
+    '🤸‍♀️ Lakukan regangan mikro 30 saat di antara sesi kuliah panjang',
+    '🥗 Pilih menu Suku-Suku Separuh di kafeteria kampus',
+    '😴 Jaga tidur berkualiti 7–8 jam & kebersihan diri (WASH)'
+  ];
+
+  /* =========================================================
+     4. KEADAAN PERMAINAN (APPLICATION STATE)
+     ========================================================= */
+  const state = {
+    completedStations: new Set(),
+    activeStationId: null,
+    // Stesen 1
+    waterGlasses: Array(8).fill(false),
+    handwashStep: 0,
+    // Stesen 2
+    breathRunning: false,
+    breathCyclesDone: 0,
+    breathTimer: null,
+    // Stesen 3
+    roomChecks: { light: false, vent: false, desk: false, rest: false },
+    // Stesen 4
+    stretchSeconds: 30,
+    stretchRunning: false,
+    stretchDone: false,
+    stretchTimer: null,
+    // Stesen 5
+    plateChoices: { karbo: null, protein: null, sayur: null },
+    // Kuiz Skrin 3
+    quizIndex: 0,
+    quizAnswers: [], // boolean[]
+    energy: 55,
+    mental: 55,
+    // Komitmen Skrin 4
+    selectedPledges: new Set([0, 1, 4])
+  };
+
+  /* =========================================================
+     5. RUJUKAN DOM & UTILITI UI
+     ========================================================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3100);
+  }
+
+  function switchScreen(targetId) {
+    const current = $('.screen.active');
+    const next = document.getElementById(targetId);
+    if (!next || current === next) return;
+
+    Sound.click();
+    if (current) {
+      current.classList.add('leaving');
+      setTimeout(() => {
+        current.classList.remove('active', 'leaving');
+        next.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 320);
+    } else {
+      next.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  /* =========================================================
+     6. RENDER PETA KAMPUS & BAR KEMAJUAN (SKRIN 2)
+     ========================================================= */
+  function renderStationCards() {
+    const grid = $('#stationGrid');
+    grid.innerHTML = STATIONS.map((st, idx) => {
+      const isDone = state.completedStations.has(st.id);
+      return `
+        <button
+          type="button"
+          class="station-card glass reveal ${isDone ? 'done' : ''}"
+          data-station="${st.id}"
+          style="--i:${idx + 2};--accent:${st.accent};--accent-l:${st.accentL};--accent-d:${st.accentD}"
+          aria-label="${st.num}: ${st.title} (${isDone ? 'Selesai' : 'Belum diteroka'})"
+        >
+          <div class="st-top">
+            <span class="st-num">${st.num}</span>
+            <span class="st-status">${isDone ? '✓ Selesai Diteroka' : 'Klik untuk Teroka'}</span>
+          </div>
+          <div class="st-icon" aria-hidden="true">
+            ${st.svg}
+            <span class="st-emo">${st.emoji}</span>
+          </div>
+          <h3>${st.title}</h3>
+          <div class="st-badges">
+            <span class="badge ${st.badgeClass}">${st.location}</span>
+            <span class="badge lav">${st.theory}</span>
+          </div>
+          <p>${st.summary}</p>
+          <span class="st-cta">
+            ${isDone ? 'Buka Semula Simulasi' : 'Mula Simulasi Mini'}
+            <span aria-hidden="true">→</span>
+          </span>
+        </button>
+      `;
+    }).join('');
+
+    $$('.station-card', grid).forEach(card => {
+      card.addEventListener('click', () => {
+        const id = Number(card.dataset.station);
+        openStationModal(id);
+      });
+    });
+
+    updateMapProgress();
+  }
+
+  function updateMapProgress() {
+    const count = state.completedStations.size;
+    const pct = Math.round((count / STATIONS.length) * 100);
+    $('#mapProgressText').textContent = `${count} / ${STATIONS.length} Stesen Selesai (${pct}%)`;
+    $('#mapProgressFill').style.width = `${pct}%`;
+    $('#mapProgressBarAria').setAttribute('aria-valuenow', String(count));
+
+    $$('#mapProgressSteps .pstep').forEach(stepEl => {
+      const id = Number(stepEl.dataset.pstep);
+      const done = state.completedStations.has(id);
+      stepEl.classList.toggle('done', done);
+      const iconEl = $('i', stepEl);
+      iconEl.textContent = done ? '✓' : String(id);
+    });
+
+    // Kemas kini kelas kad tanpa bina semula animasi penuh
+    $$('#stationGrid .station-card').forEach(card => {
+      const id = Number(card.dataset.station);
+      const done = state.completedStations.has(id);
+      card.classList.toggle('done', done);
+      $('.st-status', card).textContent = done ? '✓ Selesai Diteroka' : 'Klik untuk Teroka';
+      $('.st-cta', card).innerHTML = `${done ? 'Buka Semula Simulasi' : 'Mula Simulasi Mini'} <span aria-hidden="true">→</span>`;
+    });
+
+    const btnQuiz = $('#btnToQuiz');
+    const hint = $('#mapUnlockHint');
+    if (count === STATIONS.length) {
+      btnQuiz.disabled = false;
+      btnQuiz.classList.add('pulse');
+      hint.innerHTML = '🎉 <b>Syabas! Kesemua 5 stesen strategi selesai.</b> Klik butang di atas untuk memulakan Simulasi Senario Siswa Guru!';
+    } else {
+      btnQuiz.disabled = true;
+      btnQuiz.classList.remove('pulse');
+      hint.textContent = `🔒 Lengkapkan lagi ${STATIONS.length - count} stesen strategi di atas untuk membuka cabaran kuiz situasi kampus.`;
+    }
+  }
+
+  /* =========================================================
+     7. MODAL & 5 SIMULASI MINI STESEN
+     ========================================================= */
+  function stopActiveTimers() {
+    if (state.breathTimer) {
+      clearInterval(state.breathTimer);
+      state.breathTimer = null;
+    }
+    state.breathRunning = false;
+
+    if (state.stretchTimer) {
+      clearInterval(state.stretchTimer);
+      state.stretchTimer = null;
+    }
+    state.stretchRunning = false;
+  }
+
+  function openStationModal(id) {
+    Sound.pop();
+    stopActiveTimers();
+    state.activeStationId = id;
+    const st = STATIONS.find(s => s.id === id);
+    if (!st) return;
+
+    const modalCard = $('#stationModal .modal-card');
+    modalCard.style.setProperty('--accent', st.accent);
+    modalCard.style.setProperty('--accent-l', st.accentL);
+    modalCard.style.setProperty('--accent-d', st.accentD);
+
+    const sceneHtml = `
+      <div class="st-head">
+        <div class="st-icon" aria-hidden="true">${st.svg}<span class="st-emo">${st.emoji}</span></div>
+        <div>
+          <span class="badge ${st.badgeClass}">${st.num} • ${st.theory}</span>
+          <h2 id="modalTitle">${st.title}</h2>
+        </div>
+      </div>
+
+      <div class="scene" aria-label="Visual Berlabel Lokasi ${st.location}">
+        <span class="badge ${st.badgeClass} scene-loc">${st.location}</span>
+        <span class="badge lav scene-theory">📘 ${st.theory}</span>
+        <div class="scene-tags">
+          ${st.sceneItems.map((it, i) => `
+            <div class="scene-tag">
+              <span class="scene-emo" style="--d:${i * -0.6}s" aria-hidden="true">${it.emo}</span>
+              <span class="scene-label">${it.label}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="info">${st.info}</div>
+      <div id="stationSimContainer"></div>
+    `;
+
+    const body = $('#modalBody');
+    body.innerHTML = sceneHtml;
+    body.scrollTop = 0;
+
+    if (id === 1) renderSim1($('#stationSimContainer'));
+    if (id === 2) renderSim2($('#stationSimContainer'));
+    if (id === 3) renderSim3($('#stationSimContainer'));
+    if (id === 4) renderSim4($('#stationSimContainer'));
+    if (id === 5) renderSim5($('#stationSimContainer'));
+
+    refreshModalCompletionState();
+
+    $('#stationModal').classList.add('open');
+    document.body.classList.add('no-scroll');
+  }
+
+  function closeStationModal() {
+    stopActiveTimers();
+    $('#stationModal').classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    state.activeStationId = null;
+  }
+
+  function isStationTaskReady(id) {
+    if (state.completedStations.has(id)) return true;
+    if (id === 1) {
+      return state.waterGlasses.every(Boolean) && state.handwashStep >= HANDWASH_STEPS.length;
+    }
+    if (id === 2) {
+      return state.breathCyclesDone >= 1;
+    }
+    if (id === 3) {
+      return Object.values(state.roomChecks).every(Boolean);
+    }
+    if (id === 4) {
+      return state.stretchDone;
+    }
+    if (id === 5) {
+      const c = state.plateChoices;
+      return Boolean(c.karbo?.good && c.protein?.good && c.sayur?.good);
+    }
+    return false;
+  }
+
+  function refreshModalCompletionState() {
+    const id = state.activeStationId;
+    if (!id) return;
+    const ready = isStationTaskReady(id);
+    const btn = $('#modalCompleteBtn');
+    const msg = $('#modalFootStatus');
+    btn.disabled = !ready;
+    if (ready) {
+      msg.classList.add('ok');
+      msg.textContent = '✨ Syabas! Simulasi stesen ini telah lengkap. Klik butang untuk simpan kemajuan!';
+    } else {
+      msg.classList.remove('ok');
+      const hints = {
+        1: 'Lengkapkan 8 gelas air harian & 6 langkah kebersihan tangan untuk mengesahkan stesen ini.',
+        2: 'Lengkapkan sekurang-kurangnya 1 kitaran penuh Pernafasan 4-7-8 hingga tamat.',
+        3: 'Tandakan kesemua 4 item senarai semak bilik belajar kondusif (Sphere Standard).',
+        4: 'Jalankan pemasa regangan mikro 30 saat sehingga selesai.',
+        5: 'Pilih kombinasi sihat bagi ketiga-tiga bahagian pinggan (Karbohidrat, Protein & Sayur/Buah).'
+      };
+      msg.textContent = hints[id] || '';
+    }
+  }
+
+  /* ---------- SIMULASI STESEN 1: PENJEJAK 8 GELAS AIR & CUCI TANGAN ---------- */
+  function renderSim1(root) {
+    root.innerHTML = `
+      <div class="sim">
+        <div class="sim-head">
+          <h3>💧 1. Penjejak Pengambilan Air Harian (Sasaran: 8 Gelas / 2.0L)</h3>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button type="button" class="btn btn-soft" id="btnAddGlass" style="padding:.4em .85em;font-size:.78rem">+ Isi Gelas</button>
+            <span class="badge sky" id="waterBadge">0 / 8 Gelas</span>
+          </div>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);margin-bottom:10px">Klik pada setiap gelas air di bawah untuk merekodkan pengambilan air bersih anda sepanjang hari di kampus:</p>
+        <div class="glasses" id="glassesGrid"></div>
+        <div class="water-meter">
+          <div class="track"><div class="fill" id="waterBarFill"></div></div>
+          <b id="waterLiterLabel">0.0 / 2.0 Liter</b>
+        </div>
+        <div class="sim-msg" id="waterSimMsg">Klik gelas pertama untuk memulakan hidrasi pagi sebelum ke kuliah!</div>
+      </div>
+
+      <div class="sim">
+        <div class="sim-head">
+          <h3>🧼 2. Amalan Kebersihan Tangan Berurutan (6 Langkah Higen)</h3>
+          <span class="badge sage" id="handBadge">0 / 6 Langkah</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);margin-bottom:10px">Klik langkah mencuci tangan mengikut turutan <b>1 hingga 6</b>:</p>
+        <div class="steps-grid" id="handStepsGrid"></div>
+        <div class="sim-msg" id="handSimMsg">Mulakan dengan Langkah 1: Basahkan tangan &amp; sapu sabun.</div>
+      </div>
+    `;
+
+    const glassesGrid = $('#glassesGrid', root);
+    const makeGlassSvg = idx => `
+      <svg viewBox="0 0 48 60" aria-hidden="true">
+        <defs><clipPath id="gClip-${idx}"><polygon points="8,6 40,6 35,54 13,54"/></clipPath></defs>
+        <g clip-path="url(#gClip-${idx})">
+          <rect class="water-fill" x="6" y="6" width="36" height="50" rx="3"></rect>
+        </g>
+        <polygon class="glass-outline" points="8,6 40,6 35,54 13,54" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    function updateWaterUI() {
+      const count = state.waterGlasses.filter(Boolean).length;
+      const pct = (count / 8) * 100;
+      $('#waterBadge', root).textContent = `${count} / 8 Gelas`;
+      $('#waterBarFill', root).style.width = `${pct}%`;
+      $('#waterLiterLabel', root).textContent = `${(count * 0.25).toFixed(2)} / 2.00 Liter`;
+
+      $$('.glass-btn', glassesGrid).forEach((btn, idx) => {
+        btn.classList.toggle('full', state.waterGlasses[idx]);
+        btn.setAttribute('aria-pressed', String(state.waterGlasses[idx]));
+      });
+
+      const msg = $('#waterSimMsg', root);
+      if (count === 0) {
+        msg.className = 'sim-msg';
+        msg.textContent = 'Klik gelas pertama untuk memulakan hidrasi pagi sebelum ke kuliah!';
+      } else if (count < 8) {
+        msg.className = 'sim-msg';
+        msg.textContent = `Segar! Tinggal ${8 - count} gelas lagi untuk mencapai sasaran hidrasi optimum 8 gelas sehari.`;
+      } else {
+        msg.className = 'sim-msg good';
+        msg.textContent = '🎉 Hidrasi Optimum Tercapai (8/8 Gelas • 2.0 Liter)! Minda lebih fokus & badan kekal bertenaga.';
+      }
+      refreshModalCompletionState();
+    }
+
+    glassesGrid.innerHTML = state.waterGlasses.map((_, idx) => `
+      <button type="button" class="glass-btn" data-g="${idx}" aria-label="Gelas ${idx + 1}">
+        ${makeGlassSvg(idx)}
+        <span>Gelas ${idx + 1}</span>
+      </button>
+    `).join('');
+
+    $$('.glass-btn', glassesGrid).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.g);
+        state.waterGlasses[idx] = !state.waterGlasses[idx];
+        const filledCount = state.waterGlasses.filter(Boolean).length;
+        Sound.water(filledCount);
+        if (filledCount === 8 && state.handwashStep >= HANDWASH_STEPS.length) Sound.success();
+        updateWaterUI();
+      });
+    });
+
+    $('#btnAddGlass', root).addEventListener('click', () => {
+      const nextEmpty = state.waterGlasses.findIndex(v => !v);
+      if (nextEmpty !== -1) {
+        state.waterGlasses[nextEmpty] = true;
+        const filledCount = state.waterGlasses.filter(Boolean).length;
+        Sound.water(filledCount);
+        if (filledCount === 8 && state.handwashStep >= HANDWASH_STEPS.length) Sound.success();
+      } else {
+        Sound.pop();
+      }
+      updateWaterUI();
+    });
+
+    const handGrid = $('#handStepsGrid', root);
+    function updateHandUI() {
+      $('#handBadge', root).textContent = `${state.handwashStep} / ${HANDWASH_STEPS.length} Langkah`;
+      handGrid.innerHTML = HANDWASH_STEPS.map((st, idx) => {
+        const done = idx < state.handwashStep;
+        const isNext = idx === state.handwashStep;
+        return `
+          <button type="button" class="step-btn ${done ? 'done' : ''} ${isNext ? 'next' : ''}" data-hstep="${idx}">
+            <span class="n">${done ? '✓' : st.id}</span>
+            <span class="e" aria-hidden="true">${st.emo}</span>
+            <span>${st.text}</span>
+          </button>
+        `;
+      }).join('');
+
+      $$('.step-btn', handGrid).forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.hstep);
+          if (idx === state.handwashStep) {
+            state.handwashStep++;
+            Sound.pop();
+            if (state.handwashStep === HANDWASH_STEPS.length && state.waterGlasses.every(Boolean)) {
+              Sound.success();
+            }
+            updateHandUI();
+          } else if (idx > state.handwashStep) {
+            Sound.softWarn();
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 420);
+            const msg = $('#handSimMsg', root);
+            msg.className = 'sim-msg warn';
+            msg.textContent = `Sila klik Langkah ${state.handwashStep + 1} terlebih dahulu mengikut urutan yang betul.`;
+          } else {
+            Sound.click();
+          }
+        });
+      });
+
+      const msg = $('#handSimMsg', root);
+      if (state.handwashStep >= HANDWASH_STEPS.length) {
+        msg.className = 'sim-msg good';
+        msg.textContent = '✨ Tangan Bersih Sempurna! Kesemua 6 langkah kebersihan tangan WASH berjaya diamalkan.';
+      } else {
+        msg.className = 'sim-msg';
+        msg.textContent = `Klik Langkah ${state.handwashStep + 1}: ${HANDWASH_STEPS[state.handwashStep].text}`;
+      }
+      refreshModalCompletionState();
+    }
+
+    updateWaterUI();
+    updateHandUI();
+  }
+
+  /* ---------- SIMULASI STESEN 2: PERNAPASAN TERPANDU 4-7-8 ---------- */
+  function renderSim2(root) {
+    root.innerHTML = `
+      <div class="sim">
+        <div class="sim-head">
+          <h3>🌬️ Simulasi Pernafasan 4-7-8 (Ketenangan Minda)</h3>
+          <span class="badge lav" id="breathCycleBadge">Kitaran Selesai: ${state.breathCyclesDone}</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);text-align:center">
+          Ikuti pergerakan bulatan lembut di bawah: <b>Tarik nafas (4s)</b> melalui hidung, <b>Tahan (7s)</b>, dan <b>Hembus perlahan (8s)</b> melalui mulut.
+        </p>
+
+        <div class="breath-area">
+          <div class="breath-legend" id="breathLegend">
+            <span class="badge" data-bphase="inhale">1. Tarik Nafas • 4 Saat</span>
+            <span class="badge" data-bphase="hold">2. Tahan Nafas • 7 Saat</span>
+            <span class="badge" data-bphase="exhale">3. Hembus Perlahan • 8 Saat</span>
+          </div>
+
+          <div class="breath-wrap">
+            <div class="breath-ring"></div>
+            <div class="breath-ring r2"></div>
+            <div class="breath-circle" id="breathCircle"></div>
+            <div class="breath-text">
+              <div class="ph" id="breathPhaseLabel">${state.breathCyclesDone > 0 ? 'Tenang & Segar' : 'Sedia?'}</div>
+              <div class="ct" id="breathCountLabel">${state.breathCyclesDone > 0 ? '✓' : '4-7-8'}</div>
+              <div class="sb" id="breathSubLabel">${state.breathCyclesDone > 0 ? 'Anda boleh ulang lagi bila-bila masa' : 'Tekan Mula di bawah'}</div>
+            </div>
+          </div>
+
+          <div class="row-btns">
+            <button type="button" class="btn btn-primary" id="btnStartBreath">
+              <span>▶ Mula Kitaran Pernafasan 4-7-8</span>
+            </button>
+            <button type="button" class="btn btn-soft" id="btnStopBreath" style="display:none">
+              <span>⏹ Berhenti</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sim-msg ${state.breathCyclesDone > 0 ? 'good' : ''}" id="breathMsg" style="text-align:center">
+          ${state.breathCyclesDone > 0
+            ? '🌿 Hebat! Kadar degupan jantung lebih tenang dan fikiran kembali fokus untuk praktikum & kuliah.'
+            : 'Lengkapkan 1 kitaran penuh (19 saat) untuk merasai kesan relaksasi segera.'}
+        </div>
+      </div>
+    `;
+
+    const circle = $('#breathCircle', root);
+    const phEl = $('#breathPhaseLabel', root);
+    const ctEl = $('#breathCountLabel', root);
+    const sbEl = $('#breathSubLabel', root);
+    const btnStart = $('#btnStartBreath', root);
+    const btnStop = $('#btnStopBreath', root);
+    const msgEl = $('#breathMsg', root);
+
+    const phases = [
+      { key: 'inhale', title: 'Tarik Nafas...', secs: 4, sub: 'Tarik perlahan melalui hidung', scale: 1.0, trans: '4s ease-out' },
+      { key: 'hold',   title: 'Tahan Nafas...', secs: 7, sub: 'Kekalkan oksigen dengan tenang', scale: 1.0, trans: '0.4s ease' },
+      { key: 'exhale', title: 'Hembus Nafas...', secs: 8, sub: 'Lepaskan ketegangan perlahan-lahan', scale: 0.55, trans: '8s ease-in-out' }
+    ];
+
+    function setLegend(activeKey) {
+      $$('#breathLegend .badge', root).forEach(b => {
+        b.classList.toggle('active', b.dataset.bphase === activeKey);
+      });
+    }
+
+    function startCycle() {
+      stopActiveTimers();
+      state.breathRunning = true;
+      btnStart.style.display = 'none';
+      btnStop.style.display = 'inline-flex';
+      msgEl.className = 'sim-msg';
+      msgEl.textContent = 'Fokuskan pandangan pada bulatan pastel dan bernafas mengikut kiraan...';
+
+      let phaseIdx = 0;
+      let secLeft = phases[0].secs;
+
+      function applyPhase(p) {
+        setLegend(p.key);
+        Sound.breathCue(p.key);
+        phEl.textContent = p.title;
+        sbEl.textContent = p.sub;
+        ctEl.textContent = `${p.secs}s`;
+        circle.classList.toggle('hold', p.key === 'hold');
+        circle.style.transition = `transform ${p.trans}`;
+        requestAnimationFrame(() => {
+          circle.style.transform = `scale(${p.scale})`;
+        });
+      }
+
+      applyPhase(phases[0]);
+
+      state.breathTimer = setInterval(() => {
+        secLeft--;
+        if (secLeft > 0) {
+          ctEl.textContent = `${secLeft}s`;
+          Sound.tick();
+        } else {
+          phaseIdx++;
+          if (phaseIdx < phases.length) {
+            secLeft = phases[phaseIdx].secs;
+            applyPhase(phases[phaseIdx]);
+          } else {
+            // Selesai 1 kitaran penuh 4-7-8
+            stopActiveTimers();
+            state.breathCyclesDone++;
+            Sound.success();
+            setLegend('');
+            circle.classList.remove('hold');
+            circle.style.transition = 'transform 0.8s ease';
+            circle.style.transform = 'scale(0.72)';
+            phEl.textContent = 'Alhamdulillah, Tenang!';
+            ctEl.textContent = '✓';
+            sbEl.textContent = `Kitaran ke-${state.breathCyclesDone} selesai`;
+            $('#breathCycleBadge', root).textContent = `Kitaran Selesai: ${state.breathCyclesDone}`;
+            btnStart.style.display = 'inline-flex';
+            btnStart.innerHTML = '<span>🔄 Ulang Lagi Kitaran 4-7-8</span>';
+            btnStop.style.display = 'none';
+            msgEl.className = 'sim-msg good';
+            msgEl.textContent = '🌿 Syabas! Sistem saraf lebih tenang dan minda anda kini lebih bersedia menghadapi tugasan.';
+            refreshModalCompletionState();
+          }
+        }
+      }, 1000);
+    }
+
+    btnStart.addEventListener('click', startCycle);
+    btnStop.addEventListener('click', () => {
+      Sound.click();
+      stopActiveTimers();
+      setLegend('');
+      circle.classList.remove('hold');
+      circle.style.transition = 'transform 0.6s ease';
+      circle.style.transform = 'scale(0.55)';
+      phEl.textContent = 'Dijeda';
+      ctEl.textContent = '4-7-8';
+      sbEl.textContent = 'Tekan Mula untuk menyambung kitaran baru';
+      btnStart.style.display = 'inline-flex';
+      btnStop.style.display = 'none';
+    });
+  }
+
+  /* ---------- SIMULASI STESEN 3: SENARAI SEMAK BILIK BELAJAR ASRAMA ---------- */
+  function renderSim3(root) {
+    root.innerHTML = `
+      <div class="sim">
+        <div class="sim-head">
+          <h3>🏡 Simulasi Audit Bilik Belajar Asrama (Sphere Standard)</h3>
+          <span class="badge peach" id="roomCheckBadge">0 / 4 Kriteria</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);margin-bottom:12px">
+          Tandakan setiap elemen di bawah dan lihat transformasi visual bilik belajar asrama anda secara langsung:
+        </p>
+
+        <div class="room" id="roomVisual" aria-label="Visual Interaktif Bilik Belajar Asrama">
+          <span class="badge sage ri-room-tag" id="roomConditionTag">Suasana Bilik: Perlu Penambahbaikan</span>
+          <div class="room-item ri-light" id="ri-light">
+            <span class="ri-emo" aria-hidden="true">💡</span>
+            <span class="ri-label">Pencahayaan Cukup</span>
+          </div>
+          <div class="room-item ri-vent" id="ri-vent">
+            <span class="ri-emo" aria-hidden="true">🪟🍃</span>
+            <span class="ri-label">Pengudaraan Baik</span>
+          </div>
+          <div class="room-item ri-desk" id="ri-desk">
+            <span class="ri-emo" aria-hidden="true">💻🪑</span>
+            <span class="ri-label">Meja Ergonomik</span>
+          </div>
+          <div class="room-item ri-rest" id="ri-rest">
+            <span class="ri-emo" aria-hidden="true">🛏️🪴</span>
+            <span class="ri-label">Ruang Rehat Selamat</span>
+          </div>
+        </div>
+
+        <div class="checklist" id="roomChecklist"></div>
+        <div class="sim-msg" id="roomSimMsg">Klik keempat-empat senarai semak untuk mewujudkan ruang kediaman kondusif.</div>
+      </div>
+    `;
+
+    const listEl = $('#roomChecklist', root);
+    const roomEl = $('#roomVisual', root);
+
+    function updateRoomUI() {
+      const doneCount = Object.values(state.roomChecks).filter(Boolean).length;
+      $('#roomCheckBadge', root).textContent = `${doneCount} / 4 Kriteria`;
+
+      // Cerahkan bilik secara dinamik apabila kriteria ditanda
+      const baseDim = state.roomChecks.light ? 0.06 : 0.42;
+      const finalDim = Math.max(0, baseDim - doneCount * 0.06);
+      roomEl.style.setProperty('--dim', finalDim.toFixed(2));
+
+      ROOM_CHECKS.forEach(item => {
+        const on = state.roomChecks[item.key];
+        const visualItem = $(`#${item.roomTarget}`, root);
+        if (visualItem) visualItem.classList.toggle('on', on);
+      });
+
+      const tag = $('#roomConditionTag', root);
+      const msg = $('#roomSimMsg', root);
+      if (doneCount === 4) {
+        tag.textContent = '✨ Suasana Bilik: Kondusif, Cerah & Selamat!';
+        msg.className = 'sim-msg good';
+        msg.textContent = '🏡 Bilik Belajar Kondusif Lengkap! Persekitaran yang teratur meningkatkan kualiti fokus belajar & rehat.';
+      } else {
+        tag.textContent = `Suasana Bilik: ${doneCount}/4 Kriteria Aktif`;
+        msg.className = 'sim-msg';
+        msg.textContent = `Tandakan lagi ${4 - doneCount} kriteria keselamatan & keselesaan bilik belajar asrama.`;
+      }
+
+      listEl.innerHTML = ROOM_CHECKS.map(item => {
+        const on = state.roomChecks[item.key];
+        return `
+          <button type="button" class="check-item ${on ? 'on' : ''}" data-rkey="${item.key}" aria-pressed="${on}">
+            <span class="box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span>
+              <strong>${item.title}</strong>
+              <small>${item.desc}</small>
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      $$('.check-item', listEl).forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.dataset.rkey;
+          state.roomChecks[k] = !state.roomChecks[k];
+          Sound.pop();
+          if (Object.values(state.roomChecks).every(Boolean)) Sound.success();
+          updateRoomUI();
+        });
+      });
+
+      refreshModalCompletionState();
+    }
+
+    updateRoomUI();
+  }
+
+  /* ---------- SIMULASI STESEN 4: PEMASA MINI REGANGAN MIKRO 30 SAAT ---------- */
+  function renderSim4(root) {
+    const CIRC = 2 * Math.PI * 76; // r=76 => 477.52
+    const stretches = [
+      { range: [30, 21], idx: 0, emo: '🙆‍♀️', title: 'Fasa 1 (10s): Regangan Leher & Bahu', desc: 'Condongkan kepala perlahan ke kiri & kanan, kemudian pusingkan bahu ke belakang untuk melegakan lenguh menaip.' },
+      { range: [20, 11], idx: 1, emo: '🤲', title: 'Fasa 2 (10s): Regangan Pergelangan Tangan & Lengan', desc: 'Luruskan lengan ke hadapan dan tarik jari perlahan ke atas serta ke bawah bagi melancarkan aliran darah.' },
+      { range: [10, 0],  idx: 2, emo: '🤸‍♀️', title: 'Fasa 3 (10s): Regangan Belakang & Dada Terbuka', desc: 'Angkat kedua-dua tangan tinggi ke atas sambil menarik nafas dalam untuk menyegarkan tulang belakang!' }
+    ];
+
+    root.innerHTML = `
+      <div class="sim">
+        <div class="sim-head">
+          <h3>⏱️ Pemasa Mini Senaman Regangan Pantas (30 Saat)</h3>
+          <span class="badge sage" id="timerStatusBadge">${state.stretchDone ? '✓ Selesai 30 Saat' : 'Sedia Bermula'}</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);margin-bottom:14px">
+          Lakukan regangan mikro 30 saat ini di kerusi atau ruang kuliah anda mengikut panduan fasa di bawah:
+        </p>
+
+        <div class="timer-area">
+          <div class="timer-ring">
+            <svg viewBox="0 0 180 180">
+              <circle class="bgc" cx="90" cy="90" r="76"></circle>
+              <circle class="fgc" id="timerArc" cx="90" cy="90" r="76" stroke-dasharray="${CIRC.toFixed(2)}" stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="timer-num">
+              <div>
+                <b id="timerSecText">${state.stretchDone ? '0' : state.stretchSeconds}</b>
+                <small>SAAT</small>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="ex-list" id="exBadges">
+              <span class="badge active" data-ex="0">1. Leher &amp; Bahu</span>
+              <span class="badge" data-ex="1">2. Lengan &amp; Jari</span>
+              <span class="badge" data-ex="2">3. Belakang &amp; Dada</span>
+            </div>
+
+            <div class="exercise" id="exerciseBox">
+              <span class="ex-emo" id="exEmo" aria-hidden="true">🙆‍♀️</span>
+              <div>
+                <strong id="exTitle">${stretches[0].title}</strong>
+                <small id="exDesc">${stretches[0].desc}</small>
+              </div>
+            </div>
+
+            <div class="row-btns" style="justify-content:flex-start">
+              <button type="button" class="btn btn-primary" id="btnTimerToggle">
+                <span>${state.stretchDone ? '🔄 Mulakan Semula 30s' : '▶ Mula Pemasa 30 Saat'}</span>
+              </button>
+              <button type="button" class="btn btn-soft" id="btnTimerReset">
+                <span>↺ Set Semula</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-msg ${state.stretchDone ? 'good' : ''}" id="timerSimMsg">
+          ${state.stretchDone
+            ? '💪 Regangan 30 Saat Selesai! Otot kembali segar dan aliran oksigen ke otak meningkat.'
+            : 'Tekan "Mula Pemasa 30 Saat" dan ikuti tiga gerakan regangan mudah di sebelah!'}
+        </div>
+      </div>
+    `;
+
+    let currentExIdx = 0;
+    const arc = $('#timerArc', root);
+    const secText = $('#timerSecText', root);
+    const btnToggle = $('#btnTimerToggle', root);
+    const btnReset = $('#btnTimerReset', root);
+    const statusBadge = $('#timerStatusBadge', root);
+    const msgEl = $('#timerSimMsg', root);
+
+    function syncTimerVisual() {
+      const secs = state.stretchSeconds;
+      secText.textContent = String(secs);
+      const progress = (30 - secs) / 30;
+      arc.style.strokeDashoffset = (progress * CIRC).toFixed(2);
+
+      const found = stretches.find(s => secs <= s.range[0] && secs >= s.range[1]) || stretches[2];
+      if (found.idx !== currentExIdx) {
+        currentExIdx = found.idx;
+        const box = $('#exerciseBox', root);
+        box.classList.remove('swap');
+        void box.offsetWidth;
+        box.classList.add('swap');
+        Sound.pop();
+      }
+      $('#exEmo', root).textContent = found.emo;
+      $('#exTitle', root).textContent = found.title;
+      $('#exDesc', root).textContent = found.desc;
+      $$('#exBadges .badge', root).forEach(b => {
+        b.classList.toggle('active', Number(b.dataset.ex) === found.idx);
+      });
+    }
+
+    btnToggle.addEventListener('click', () => {
+      if (state.stretchRunning) {
+        // Jeda
+        Sound.click();
+        clearInterval(state.stretchTimer);
+        state.stretchTimer = null;
+        state.stretchRunning = false;
+        statusBadge.textContent = '⏸ Dijeda';
+        btnToggle.innerHTML = '<span>▶ Sambung Pemasa</span>';
+        return;
+      }
+
+      if (state.stretchSeconds <= 0) {
+        state.stretchSeconds = 30;
+      }
+      Sound.pop();
+      state.stretchRunning = true;
+      statusBadge.textContent = '🏃‍♀️ Sedang Regangan...';
+      btnToggle.innerHTML = '<span>⏸ Jeda Pemasa</span>';
+      msgEl.className = 'sim-msg';
+      msgEl.textContent = 'Teruskan pergerakan lembut sambil bernafas secara teratur...';
+      syncTimerVisual();
+
+      state.stretchTimer = setInterval(() => {
+        state.stretchSeconds = Math.max(0, state.stretchSeconds - 1);
+        syncTimerVisual();
+
+        if (state.stretchSeconds > 0) {
+          Sound.tick();
+        } else {
+          clearInterval(state.stretchTimer);
+          state.stretchTimer = null;
+          state.stretchRunning = false;
+          state.stretchDone = true;
+          Sound.success();
+          statusBadge.textContent = '✓ Selesai 30 Saat!';
+          btnToggle.innerHTML = '<span>🔄 Ulang Regangan 30s</span>';
+          msgEl.className = 'sim-msg good';
+          msgEl.textContent = '🎉 Syabas! Senaman regangan mikro 30 saat berjaya diselesaikan. Badan kembali cergas!';
+          refreshModalCompletionState();
+        }
+      }, 1000);
+    });
+
+    btnReset.addEventListener('click', () => {
+      Sound.click();
+      clearInterval(state.stretchTimer);
+      state.stretchTimer = null;
+      state.stretchRunning = false;
+      state.stretchSeconds = 30;
+      currentExIdx = 0;
+      syncTimerVisual();
+      statusBadge.textContent = state.stretchDone ? '✓ Selesai 30 Saat' : 'Sedia Bermula';
+      btnToggle.innerHTML = '<span>▶ Mula Pemasa 30 Saat</span>';
+    });
+
+    if (state.stretchDone && state.stretchSeconds === 0) {
+      arc.style.strokeDashoffset = CIRC.toFixed(2);
+    } else {
+      syncTimerVisual();
+    }
+  }
+
+  /* ---------- SIMULASI STESEN 5: PERMAINAN MINI BINA PINGGAN SIHAT SISWA ---------- */
+  function renderSim5(root) {
+    root.innerHTML = `
+      <div class="sim">
+        <div class="sim-head">
+          <h3>🍽️ Permainan Mini: Bina Pinggan Sihat Siswa (Suku-Suku Separuh)</h3>
+          <span class="badge sage" id="plateScoreBadge">0 / 3 Kategori Sihat</span>
+        </div>
+        <p style="font-size:.84rem;color:var(--ink-2);margin-bottom:14px">
+          Pilih satu hidangan bagi setiap bahagian <b>Karbohidrat</b>, <b>Protein</b>, dan <b>Sayur &amp; Buah</b> untuk melengkapkan pinggan akademik bertenaga:
+        </p>
+
+        <div class="plate-area">
+          <div>
+            <div class="plate" aria-label="Visual Pinggan Suku-Suku Separuh">
+              <div class="plate-slot ps-protein">
+                <div class="ps-emo" id="slotProtein">➕</div>
+                <span class="ps-label">¼ Protein</span>
+              </div>
+              <div class="plate-slot ps-karbo">
+                <div class="ps-emo" id="slotKarbo">➕</div>
+                <span class="ps-label">¼ Karbohidrat</span>
+              </div>
+              <div class="plate-slot ps-sayur">
+                <div class="ps-emo" id="slotSayur">➕</div>
+                <span class="ps-label">½ Sayur &amp; Buah</span>
+              </div>
+            </div>
+            <div class="plate-score" id="plateSummaryLabel">Pilih 3 komponen makanan</div>
+          </div>
+
+          <div id="foodGroupsWrap"></div>
+        </div>
+
+        <div class="feedback" id="plateFeedback" style="margin-top:12px">
+          Klik mana-mana menu kafeteria di atas untuk melihat maklum balas nutrisi segera!
+        </div>
+      </div>
+    `;
+
+    const groupsWrap = $('#foodGroupsWrap', root);
+    groupsWrap.innerHTML = Object.entries(PLATE_FOODS).map(([groupKey, group]) => `
+      <div class="food-group">
+        <h4>
+          <span>${group.label}</span>
+          <span class="badge lav">${group.badge}</span>
+        </h4>
+        <div class="food-opts">
+          ${group.items.map(item => `
+            <button type="button" class="food" data-fgroup="${groupKey}" data-fid="${item.id}">
+              <span class="fe" aria-hidden="true">${item.emo}</span>
+              <span>${item.name}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    function syncPlateUI(lastClickedItem = null) {
+      const c = state.plateChoices;
+      const slotMap = { karbo: '#slotKarbo', protein: '#slotProtein', sayur: '#slotSayur' };
+      Object.entries(slotMap).forEach(([k, sel]) => {
+        const el = $(sel, root);
+        const chosen = c[k];
+        el.textContent = chosen ? chosen.emo : '➕';
+      });
+
+      $$('.food', groupsWrap).forEach(btn => {
+        const gk = btn.dataset.fgroup;
+        const fid = btn.dataset.fid;
+        const isSel = c[gk]?.id === fid;
+        btn.classList.toggle('sel', isSel);
+        btn.classList.toggle('good', Boolean(isSel && c[gk]?.good));
+        btn.classList.toggle('bad', Boolean(isSel && !c[gk]?.good));
+      });
+
+      const healthyCount = ['karbo', 'protein', 'sayur'].filter(k => c[k]?.good).length;
+      $('#plateScoreBadge', root).textContent = `${healthyCount} / 3 Kategori Sihat`;
+      $('#plateSummaryLabel', root).textContent =
+        healthyCount === 3 ? '🌟 Pinggan Suku-Suku Separuh Sempurna!' : `Skor Pinggan: ${healthyCount} / 3 Seimbang`;
+
+      const fb = $('#plateFeedback', root);
+      if (lastClickedItem) {
+        fb.classList.remove('show', 'good', 'bad');
+        void fb.offsetWidth;
+        fb.classList.add('show', lastClickedItem.good ? 'good' : 'bad');
+        if (healthyCount === 3 && lastClickedItem.good) {
+          fb.innerHTML = `✅ <b>${lastClickedItem.name}:</b> ${lastClickedItem.msg}<br>🎉 <b>Tahniah!</b> Pinggan Sihat Siswa anda lengkap &amp; seimbang mengikut panduan nutrisi WHO!`;
+        } else {
+          fb.innerHTML = `${lastClickedItem.good ? '✅' : '⚠️'} <b>${lastClickedItem.name}:</b> ${lastClickedItem.msg}`;
+        }
+      } else if (healthyCount === 3) {
+        fb.className = 'feedback good';
+        fb.innerHTML = '🎉 <b>Pinggan Sihat Lengkap!</b> Kombinasi nutrisi seimbang sedia membekalkan tenaga akademik sepanjang hari.';
+      }
+
+      refreshModalCompletionState();
+    }
+
+    $$('.food', groupsWrap).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const gk = btn.dataset.fgroup;
+        const fid = btn.dataset.fid;
+        const item = PLATE_FOODS[gk].items.find(x => x.id === fid);
+        if (!item) return;
+        state.plateChoices[gk] = item;
+
+        const slotIds = { karbo: '#slotKarbo', protein: '#slotProtein', sayur: '#slotSayur' };
+        const slotEl = $(slotIds[gk], root);
+        slotEl.classList.remove('pop');
+        void slotEl.offsetWidth;
+        slotEl.classList.add('pop');
+
+        if (item.good) {
+          Sound.pop();
+          const allGood = ['karbo', 'protein', 'sayur'].every(k => state.plateChoices[k]?.good);
+          if (allGood) Sound.success();
+        } else {
+          Sound.softWarn();
+        }
+        syncPlateUI(item);
+      });
+    });
+
+    syncPlateUI();
+  }
+
+  /* =========================================================
+     8. KUIZ SIMULASI SENARIO SISWA GURU (SKRIN 3)
+     ========================================================= */
+  function startQuizFlow() {
+    state.quizIndex = 0;
+    state.quizAnswers = [];
+    state.energy = 55;
+    state.mental = 55;
+    updateMetersUI();
+    renderCurrentQuestion();
+  }
+
+  function updateMetersUI(energyDiff = 0, mentalDiff = 0) {
+    state.energy = Math.max(20, Math.min(100, state.energy));
+    state.mental = Math.max(20, Math.min(100, state.mental));
+
+    $('#energyVal').textContent = `${state.energy}%`;
+    $('#mentalVal').textContent = `${state.mental}%`;
+    $('#energyFill').style.width = `${state.energy}%`;
+    $('#mentalFill').style.width = `${state.mental}%`;
+
+    if (energyDiff !== 0) spawnMeterPop($('#meterEnergyBox'), energyDiff);
+    if (mentalDiff !== 0) spawnMeterPop($('#meterMentalBox'), mentalDiff);
+
+    const avg = (state.energy + state.mental) / 2;
+    const av = $('#studentAvatar');
+    const cap = $('#studentAvatarCap');
+    av.classList.remove('bounce');
+    void av.offsetWidth;
+    av.classList.add('bounce');
+
+    if (avg >= 85) {
+      av.textContent = '🤩';
+      cap.textContent = 'Sangat Bertenaga, Tenang & Bersedia Cemerlang!';
+    } else if (avg >= 68) {
+      av.textContent = '😊';
+      cap.textContent = 'Seimbang & Positif menghadapi jadual kampus!';
+    } else if (avg >= 50) {
+      av.textContent = '🙂';
+      cap.textContent = 'Stabil, teruskan membuat pilihan gaya hidup bijak!';
+    } else {
+      av.textContent = '😮‍💨';
+      cap.textContent = 'Agak keletihan — mari utamakan rehat & strategi kendiri!';
+    }
+  }
+
+  function spawnMeterPop(box, diff) {
+    box.classList.remove('flash');
+    void box.offsetWidth;
+    box.classList.add('flash');
+    const pop = document.createElement('span');
+    pop.className = `float-pop ${diff > 0 ? 'up' : 'down'}`;
+    pop.textContent = `${diff > 0 ? '+' : ''}${diff}%`;
+    box.appendChild(pop);
+    setTimeout(() => pop.remove(), 1250);
+  }
+
+  function renderQuizDots() {
+    $('#quizDots').innerHTML = QUIZ_QUESTIONS.map((_, idx) => {
+      let cls = '';
+      if (idx < state.quizAnswers.length) {
+        cls = state.quizAnswers[idx] ? 'ok' : 'no';
+      } else if (idx === state.quizIndex) {
+        cls = 'cur';
+      }
+      return `<i class="${cls}"></i>`;
+    }).join('');
+  }
+
+  function renderCurrentQuestion() {
+    const q = QUIZ_QUESTIONS[state.quizIndex];
+    if (!q) return;
+
+    const card = $('#quizCard');
+    card.classList.remove('swap');
+    void card.offsetWidth;
+    card.classList.add('swap');
+
+    $('#qEmoji').textContent = q.emoji;
+    $('#qBadges').innerHTML = `
+      <span class="badge lav">Soalan ${state.quizIndex + 1} / ${QUIZ_QUESTIONS.length}</span>
+      <span class="badge sage">${q.category}</span>
+      <span class="badge peach">${q.theory}</span>
+    `;
+    $('#qHeading').textContent = q.heading;
+    $('#qText').textContent = q.question;
+
+    const optsWrap = $('#qOpts');
+    optsWrap.innerHTML = q.options.map((opt, idx) => `
+      <button type="button" class="opt" data-opt="${idx}">
+        <span class="k">${opt.key}</span>
+        <span>${opt.text}</span>
+      </button>
+    `).join('');
+
+    $('#qFeedbackWrap').classList.remove('show');
+    $('#btnNextLabel').textContent =
+      state.quizIndex < QUIZ_QUESTIONS.length - 1
+        ? 'Situasi Seterusnya'
+        : 'Lihat Keputusan & Kad Komitmen Digital';
+
+    $$('.opt', optsWrap).forEach(btn => {
+      btn.addEventListener('click', () => handleAnswerClick(Number(btn.dataset.opt)));
+    });
+
+    renderQuizDots();
+  }
+
+  function handleAnswerClick(chosenIdx) {
+    const q = QUIZ_QUESTIONS[state.quizIndex];
+    const chosen = q.options[chosenIdx];
+    if (!chosen) return;
+
+    const buttons = $$('#qOpts .opt');
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      const opt = q.options[idx];
+      if (opt.correct) {
+        btn.classList.add('right');
+      } else if (idx === chosenIdx && !opt.correct) {
+        btn.classList.add('wrong');
+      } else {
+        btn.classList.add('dim');
+      }
+    });
+
+    state.quizAnswers.push(Boolean(chosen.correct));
+    state.energy += chosen.energyDelta;
+    state.mental += chosen.mentalDelta;
+    updateMetersUI(chosen.energyDelta, chosen.mentalDelta);
+    renderQuizDots();
+
+    if (chosen.correct) {
+      Sound.success();
+    } else {
+      Sound.softWarn();
+    }
+
+    const fbBox = $('#qFeedbackBox');
+    fbBox.className = `feedback ${chosen.correct ? 'good' : 'bad'}`;
+    fbBox.innerHTML = `
+      ${chosen.correct ? '🌟 <b>Pilihan Tepat! (+15% Tenaga &amp; +15% Mental)</b>' : '💡 <b>Refleksi Kesejahteraan:</b>'}<br>
+      ${chosen.feedback}
+    `;
+    $('#qFeedbackWrap').classList.add('show');
+  }
+
+  /* =========================================================
+     9. SKRIN PENUTUP, CONFETTI & KAD KOMITMEN DIGITAL (SKRIN 4)
+     ========================================================= */
+  function openEndScreen() {
+    switchScreen('screen-end');
+    setTimeout(() => {
+      Sound.fanfare();
+      launchConfetti();
+      populateResultsAndCard();
+    }, 360);
+  }
+
+  function populateResultsAndCard() {
+    const stationsCount = state.completedStations.size;
+    const correctQuiz = state.quizAnswers.filter(Boolean).length;
+    // Skor kesejahteraan gabungan: 50% eksplorasi 5 stesen + 50% prestasi senario/tenaga
+    const stationScore = (stationsCount / STATIONS.length) * 50;
+    const quizScore = (correctQuiz / QUIZ_QUESTIONS.length) * 50;
+    const totalScore = Math.round(stationScore + quizScore);
+
+    $('#statStations').textContent = `${stationsCount} / ${STATIONS.length}`;
+    $('#statQuiz').textContent = `${correctQuiz} / ${QUIZ_QUESTIONS.length}`;
+    $('#statEnergy').textContent = `${state.energy}%`;
+    $('#statMental').textContent = `${state.mental}%`;
+    $('#ccScoreFoot').textContent = `${totalScore}%`;
+
+    const rankEl = $('#finalRankBadge');
+    const summaryEl = $('#endSummaryMsg');
+    if (totalScore >= 90) {
+      rankEl.textContent = '🌟 Duta Kesejahteraan Siswa Guru Cemerlang';
+      summaryEl.textContent = 'Luar biasa! Anda menguasai kesemua strategi penjagaan kesihatan mental & fizikal serta membuat keputusan harian yang sangat bijak di kampus.';
+    } else if (totalScore >= 70) {
+      rankEl.textContent = '🌿 Pengamal Gaya Hidup Kampus Sejahtera';
+      summaryEl.textContent = 'Syabas! Anda mempunyai asas kesejahteraan diri yang kukuh. Teruskan mengamalkan 5 strategi kesihatan ini sepanjang sesi kuliah & praktikum.';
+    } else {
+      rankEl.textContent = '🌱 Perintis Kesejahteraan Siswa Guru';
+      summaryEl.textContent = 'Permulaan yang baik! Setiap langkah kecil dalam menjaga hidrasi, tidur, emosi, dan pemakanan akan membawa perubahan besar kepada kecemerlangan anda.';
+    }
+
+    // Animasi bulatan skor
+    const CIRC = 2 * Math.PI * 92; // 578.05
+    const circle = $('#finalScoreCircle');
+    circle.style.transition = 'none';
+    circle.style.strokeDashoffset = CIRC.toFixed(2);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        circle.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(.22,.9,.28,1)';
+        const offset = CIRC * (1 - totalScore / 100);
+        circle.style.strokeDashoffset = offset.toFixed(2);
+      });
+    });
+
+    // Animasi kiraan nombor skor
+    const numEl = $('#finalScoreNum');
+    let cur = 0;
+    const step = Math.max(1, Math.ceil(totalScore / 35));
+    const counter = setInterval(() => {
+      cur = Math.min(totalScore, cur + step);
+      numEl.textContent = `${cur}%`;
+      if (cur >= totalScore) clearInterval(counter);
+    }, 30);
+
+    // Tarikh kad komitmen
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ms-MY', { day: '2-digit', month: 'short', year: 'numeric' });
+    $('#ccDateBadge').textContent = dateStr;
+
+    renderPledgeChips();
+    syncCommitmentPreview();
+  }
+
+  function renderPledgeChips() {
+    const wrap = $('#commitChips');
+    wrap.innerHTML = PLEDGE_OPTIONS.map((text, idx) => `
+      <button type="button" class="cchip ${state.selectedPledges.has(idx) ? 'on' : ''}" data-pledge="${idx}">
+        ${text}
+      </button>
+    `).join('');
+
+    $$('.cchip', wrap).forEach(chip => {
+      chip.addEventListener('click', () => {
+        const idx = Number(chip.dataset.pledge);
+        if (state.selectedPledges.has(idx)) {
+          state.selectedPledges.delete(idx);
+        } else {
+          state.selectedPledges.add(idx);
+        }
+        Sound.pop();
+        chip.classList.toggle('on', state.selectedPledges.has(idx));
+        syncCommitmentPreview();
+      });
+    });
+  }
+
+  function syncCommitmentPreview() {
+    const rawName = $('#commitNameInput').value.trim();
+    $('#ccNameDisplay').textContent = rawName || 'Siswa Guru Sejahtera';
+
+    const listEl = $('#ccPledgeList');
+    const chosen = Array.from(state.selectedPledges).sort((a, b) => a - b).map(i => PLEDGE_OPTIONS[i]);
+    if (chosen.length === 0) {
+      listEl.innerHTML = `<li class="empty">Pilih sekurang-kurangnya satu ikrar kesejahteraan di sebelah...</li>`;
+    } else {
+      listEl.innerHTML = chosen.map(item => `<li>${item}</li>`).join('');
+    }
+  }
+
+  /* Muat Turun Kad Komitmen Digital sebagai PNG berkualiti tinggi */
+  function downloadCommitmentCardPng() {
+    Sound.success();
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 760;
+    const c = canvas.getContext('2d');
+
+    // Latar pastel lembut
+    const bg = c.createLinearGradient(0, 0, canvas.width, canvas.height);
+    bg.addColorStop(0, '#FFF9F0');
+    bg.addColorStop(0.5, '#EFE8FB');
+    bg.addColorStop(1, '#E4EFDF');
+    c.fillStyle = bg;
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Bulatan hiasan pastel
+    c.fillStyle = 'rgba(255, 201, 176, 0.42)';
+    c.beginPath(); c.arc(960, 90, 170, 0, Math.PI * 2); c.fill();
+    c.fillStyle = 'rgba(168, 195, 160, 0.35)';
+    c.beginPath(); c.arc(110, 680, 160, 0, Math.PI * 2); c.fill();
+
+    // Bingkai dalaman
+    c.strokeStyle = '#FFFFFF';
+    c.lineWidth = 6;
+    c.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
+
+    // Tajuk & Lencana
+    c.fillStyle = '#5F8459';
+    c.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+    c.fillText('KAD KOMITMEN DIGITAL • KEMBARA KESEJAHTERAAN SISWA GURU', 76, 98);
+
+    c.fillStyle = '#38423D';
+    c.font = 'bold 40px "Quicksand", "Plus Jakarta Sans", sans-serif';
+    c.fillText('Ikrar Kesejahteraan Mental & Fizikal', 76, 154);
+
+    const name = ($('#commitNameInput').value.trim() || 'Siswa Guru Sejahtera');
+    c.fillStyle = '#7D67B8';
+    c.font = 'bold 36px "Quicksand", "Plus Jakarta Sans", sans-serif';
+    c.fillText(name, 76, 214);
+
+    c.strokeStyle = 'rgba(125, 103, 184, 0.4)';
+    c.lineWidth = 2;
+    c.beginPath(); c.moveTo(76, 232); c.lineTo(740, 232); c.stroke();
+
+    const chosen = Array.from(state.selectedPledges).sort((a, b) => a - b).map(i => PLEDGE_OPTIONS[i]);
+    const list = chosen.length ? chosen : ['Mengamalkan 5 strategi kesihatan mental & fizikal siswa guru setiap hari'];
+
+    let y = 282;
+    c.font = '600 23px "Plus Jakarta Sans", sans-serif';
+    list.slice(0, 6).forEach(item => {
+      c.fillStyle = 'rgba(255,255,255,0.82)';
+      c.fillRect(76, y - 32, 928, 48);
+      c.fillStyle = '#38423D';
+      c.fillText(item, 94, y);
+      y += 60;
+    });
+
+    // Cop rasmi
+    c.save();
+    c.translate(895, 575);
+    c.rotate(-0.22);
+    c.strokeStyle = '#5F8459';
+    c.lineWidth = 5;
+    c.beginPath(); c.arc(0, 0, 82, 0, Math.PI * 2); c.stroke();
+    c.lineWidth = 2;
+    c.beginPath(); c.arc(0, 0, 72, 0, Math.PI * 2); c.stroke();
+    c.fillStyle = '#5F8459';
+    c.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+    c.textAlign = 'center';
+    c.fillText('KOMITMEN', 0, -14);
+    c.fillText('DISAHKAN', 0, 10);
+    c.fillText('★ SEJAHTERA ★', 0, 34);
+    c.restore();
+
+    // Kaki kad & kredit pembangun
+    c.fillStyle = '#67716C';
+    c.font = '600 19px "Plus Jakarta Sans", sans-serif';
+    c.fillText(`Skor Kesejahteraan: ${$('#ccScoreFoot').textContent}  •  Tarikh: ${$('#ccDateBadge').textContent}`, 76, 672);
+    c.fillStyle = '#7D67B8';
+    c.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+    c.fillText('Karya Interaktif Dibangunkan oleh: Hajar (HAJAR SAPPE BINTI MOHD SAUM • 2026012310007)', 76, 704);
+
+    const link = document.createElement('a');
+    link.download = 'Kad-Komitmen-Kesejahteraan-Siswa-Guru-Hajar.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('📥 Kad Komitmen Digital berjaya dimuat turun!');
+  }
+
+  /* ---------- ENJIN ANIMASI CONFETTI PASTEL ---------- */
+  let confettiAnimId = null;
+  function launchConfetti() {
+    const canvas = $('#confetti');
+    const c = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+
+    const colors = ['#A8C3A0', '#C9B8E8', '#FFC9B0', '#BFE0F0', '#7FA978', '#9A86CF', '#F5B971'];
+    const pieces = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.5,
+      w: 7 + Math.random() * 7,
+      h: 10 + Math.random() * 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 3.4,
+      vy: 2.2 + Math.random() * 3.8,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.16,
+      opacity: 1
+    }));
+
+    let frame = 0;
+    function tick() {
+      frame++;
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = 0;
+      pieces.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.03;
+        p.rot += p.vr;
+        if (frame > 130) p.opacity = Math.max(0, p.opacity - 0.015);
+        if (p.y < canvas.height + 30 && p.opacity > 0) {
+          alive++;
+          c.save();
+          c.globalAlpha = p.opacity;
+          c.translate(p.x, p.y);
+          c.rotate(p.rot);
+          c.fillStyle = p.color;
+          c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          c.restore();
+        }
+      });
+
+      if (alive > 0) {
+        confettiAnimId = requestAnimationFrame(tick);
+      } else {
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        confettiAnimId = null;
+      }
+    }
+
+    confettiAnimId = requestAnimationFrame(tick);
+  }
+
+  /* =========================================================
+     10. MAIN SEMULA & PENGIKAT ACARA (EVENT LISTENERS)
+     ========================================================= */
+  function resetAllGame() {
+    stopActiveTimers();
+    state.completedStations.clear();
+    state.waterGlasses = Array(8).fill(false);
+    state.handwashStep = 0;
+    state.breathCyclesDone = 0;
+    state.roomChecks = { light: false, vent: false, desk: false, rest: false };
+    state.stretchSeconds = 30;
+    state.stretchDone = false;
+    state.plateChoices = { karbo: null, protein: null, sayur: null };
+    state.quizIndex = 0;
+    state.quizAnswers = [];
+    state.energy = 55;
+    state.mental = 55;
+    state.selectedPledges = new Set([0, 1, 4]);
+
+    renderStationCards();
+    switchScreen('screen-start');
+    showToast('🔄 Permainan telah diset semula. Selamat memulakan kembara baru!');
+  }
+
+  function initEvents() {
+    // Togol Bunyi
+    $('#soundToggle').addEventListener('click', () => {
+      const muted = Sound.toggleMute();
+      $('#soundToggle').classList.toggle('muted', muted);
+      showToast(muted ? '🔇 Kesan bunyi dibisukan' : '🔊 Kesan bunyi lembut diaktifkan');
+    });
+
+    // Navigasi Skrin 1 -> Skrin 2
+    $('#btnStartJourney').addEventListener('click', () => {
+      Sound.pop();
+      switchScreen('screen-map');
+    });
+
+    $('#btnBackStart').addEventListener('click', () => switchScreen('screen-start'));
+
+    // Modal Stesen
+    $('#modalCloseBtn').addEventListener('click', () => {
+      Sound.click();
+      closeStationModal();
+    });
+    $('#modalBackdrop').addEventListener('click', () => {
+      Sound.click();
+      closeStationModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && $('#stationModal').classList.contains('open')) {
+        Sound.click();
+        closeStationModal();
+      }
+    });
+
+    $('#modalCompleteBtn').addEventListener('click', () => {
+      const id = state.activeStationId;
+      if (!id) return;
+      const wasNew = !state.completedStations.has(id);
+      state.completedStations.add(id);
+      Sound.success();
+      closeStationModal();
+      updateMapProgress();
+
+      const st = STATIONS.find(s => s.id === id);
+      if (state.completedStations.size === STATIONS.length) {
+        showToast('🎉 Kesemua 5 Stesen Selesai! Anda kini boleh masuk ke Simulasi Senario Siswa Guru!');
+      } else if (wasNew && st) {
+        showToast(`✅ ${st.num} selesai! (${state.completedStations.size}/5 stesen diteroka)`);
+      }
+    });
+
+    // Navigasi Skrin 2 -> Skrin 3 (Kuiz)
+    $('#btnToQuiz').addEventListener('click', () => {
+      if (state.completedStations.size < STATIONS.length) return;
+      startQuizFlow();
+      switchScreen('screen-quiz');
+    });
+
+    $('#btnBackMap').addEventListener('click', () => switchScreen('screen-map'));
+
+    // Soalan Seterusnya dalam Kuiz
+    $('#btnNextQuestion').addEventListener('click', () => {
+      if (state.quizIndex < QUIZ_QUESTIONS.length - 1) {
+        state.quizIndex++;
+        Sound.pop();
+        renderCurrentQuestion();
+      } else {
+        openEndScreen();
+      }
+    });
+
+    // Kad Komitmen Digital (Skrin 4)
+    $('#commitNameInput').addEventListener('input', syncCommitmentPreview);
+    $('#btnStampCommit').addEventListener('click', () => {
+      Sound.success();
+      const card = $('#commitCardPreview');
+      card.classList.remove('stamped');
+      void card.offsetWidth;
+      card.classList.add('stamped');
+      showToast('💮 Kad Komitmen Digital anda telah dicop & disahkan!');
+    });
+
+    $('#btnDownloadCard').addEventListener('click', downloadCommitmentCardPng);
+
+    // Butang Penutup & Main Semula
+    $('#btnReplayAll').addEventListener('click', resetAllGame);
+    $('#btnRevisitMap').addEventListener('click', () => switchScreen('screen-map'));
+    $('#btnCelebrateAgain').addEventListener('click', () => {
+      Sound.fanfare();
+      launchConfetti();
+    });
+  }
+
+  // Permulaan Aplikasi
+  renderStationCards();
+  initEvents();
+})();
+</script>
+</body>
+</html>
